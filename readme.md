@@ -1,4 +1,4 @@
-# FileManager for Laravel 5 
+# FileManager for Laravel 5
 
 Custom file manager for Laravel 5
 
@@ -13,27 +13,33 @@ First require this package:
 composer require infinety/filemanager
 ```
 
-Then you need to create a custom Filesystem drive on `filesystem.php`:
-```php
-    'filemanager' => [
-        'driver' => 'local',
-        'root'   => base_path('public/'),
-    ]
-```
+Add the provider on ‘app.php’:
+`Infinety\FileManager\FileManagerServiceProvider::class`
 
+Publish config and public files:
+`php artisan vendor:publish --provider="Infinety\FileManager\FileManagerServiceProvider"
+`
+
+Then you need to modify options on new file on options `file manager.php`
 
 Add Link for Admin routes:
 
-`url('admin/filemanager')`   
+`url('admin/filemanager')`  
 
 
 ### Todos
 
  * Better docs
 
-License
-----
+### Thanks
+Daniel Morales: [dmuploader][1]
+SWIS: [contextMenu][2]
 
-MIT
+---- 
+License: MIT
 
 
+
+
+[1]:	https://github.com/danielm/uploader
+[2]:	https://github.com/swisnl/jQuery-contextMenu
