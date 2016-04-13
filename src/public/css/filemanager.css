@@ -1,0 +1,315 @@
+/**
+ * File Manager Style
+ *
+ *
+ * This style has been designed by Eric Lagarda
+ *
+ * @project   FileManager package for Laravel 5
+ * @version   0.0.2
+ * @package   xhtml-css
+ * @author    Eric Lagarda
+ * @copyright 2016 by Eric Lagarda
+ * @license   GPL v3
+ *
+*/
+
+.navbar-default {
+    background: none;
+    border: none;
+}
+.navbar-default .navbar-brand {
+    color: #ffffff !important;
+    opacity: 1;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #ffffff !important;
+}
+.navbar-default .navbar-text {
+    color: #ffffff !important;
+}
+.navbar-default .navbar-nav > li > a {
+    color: #ffffff !important;
+    opacity: 1;
+    padding: 10px 15px;
+}
+
+.navbar-default .navbar-nav > li > button {
+    padding: 10px 15px;
+}
+
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #423F3F !important;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+    background-color: #39bee8;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+    color: #ffffff !important;
+    opacity: 1;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+    color: #ffffff !important;
+    background-color: #39bee8;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+    background-color: #39bee8;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff !important;
+    background-color: #39bee8;
+    opacity: 1;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #ffffff !important;
+    background-color: #39bee8;
+    opacity: 1;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #ffffff !important;
+    background-color: #39bee8;
+    opacity: 1;
+}
+.navbar-default .navbar-toggle {
+    border-color: #39bee8;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #39bee8;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+    border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+    color: #ffffff !important;
+}
+.navbar-default .navbar-link:hover {
+    color: #ffffff !important;
+}
+/* Set view type active */
+li.active .btn{
+    background-color: #48b0f7;
+    border-color: #48b0f7;
+    color: #FFF;
+}
+
+@media (max-width: 767px) {
+
+    .navbar-default .navbar-nav > li > a {
+        padding: 25px;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #ffffff !important;
+        opacity: 1;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: #ffffff !important;
+        opacity: 1;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+        color: #ffffff !important;
+        background-color: #39bee8;
+        opacity: 1;
+    }
+}
+
+/* Sidebar */
+
+#sidebar {
+    height: 100%;
+    padding-right: 0;
+    padding-top: 20px;
+    border-right: 1px solid #f2f2f2;
+}
+#sidebar h5{
+    opacity: 0.4;
+}
+#sidebar .nav {
+    width: 95%;
+}
+#sidebar li {
+    border:0 #f2f2f2 solid;
+    border-left: 3px solid #FFF;
+    font-size: 16px;
+    padding: 5px;
+    cursor:pointer;
+    transition: all 0.6s ease;
+}
+
+#sidebar li i{
+    padding-right: 10px;
+}
+
+
+#sidebar li.active{
+    border-left: 3px solid #000;
+    background: none;
+    color: #626262;
+}
+
+#sidebar li:hover{
+    padding-left: 15px;
+}
+
+/* collapsed sidebar styles */
+@media screen and (max-width: 767px) {
+    .row-offcanvas {
+        position: relative;
+        -webkit-transition: all 0.25s ease-out;
+        -moz-transition: all 0.25s ease-out;
+        transition: all 0.25s ease-out;
+    }
+    .row-offcanvas-right
+    .sidebar-offcanvas {
+        right: -41.6%;
+    }
+
+    .row-offcanvas-left
+    .sidebar-offcanvas {
+        left: -41.6%;
+    }
+    .row-offcanvas-right.active {
+        right: 41.6%;
+    }
+    .row-offcanvas-left.active {
+        left: 41.6%;
+    }
+    .sidebar-offcanvas {
+        position: absolute;
+        top: 0;
+        width: 41.6%;
+    }
+    #sidebar {
+        padding-top:0;
+    }
+}
+
+#files_container{
+    padding-top: 20px;
+    padding-bottom: 10px;
+    min-height:420px;
+}
+
+
+.filemanager-item {
+    height:80px;
+    background: #F2F2F2;
+    border: 1px solid #E6E6E6;
+    margin: 0 0px 10px 0;
+    cursor: pointer;
+    padding: 0;
+}
+
+.filemanager-item:before {
+    content: '';
+    margin-left: -0.25em;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+
+.centered {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left:0;
+}
+
+.filemanager-item .icon {
+    height:100%;
+}
+.filemanager-item .icon i{
+    font-size:48px;
+    color: #48B0F7;
+}
+
+.filemanager-item .icon img{
+    height:48px;
+    width: 48px;
+}
+
+.filemanager-item .name-file{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filemanager-item:hover{
+    background: #48B0F7;
+    color:#FFF;
+}
+.filemanager-item:hover .icon i{
+    color: #F2F2F2;
+}
+
+.filemanager-item.active{
+    background: #48B0F7;
+    color:#FFF;
+}
+
+.error-file{
+    background: #FE9E9E;
+}
+
+.error-file:hover{
+    background: #FE9E9E;
+}
+
+.no-data{
+    padding: 20px;
+    text-align: center;
+}
+
+.no-data h3{
+    color: #ACACAC;
+}
+
+.loading{
+    height: 350px;
+    position: relative;
+}
+
+.loading img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -40px;
+    margin-top: -40px;
+}
+
+
+/*
+* Upload
+*/
+
+.upload-div{
+    position: relative;
+    text-align: center;
+    border: 3px dashed #48B0F7;
+    height:100%;
+    width:100%;
+    z-index: 1;
+}
+
+
+#previewInfo .close {
+    position: absolute;
+    top: -17px;
+    right: 10px;
+}
