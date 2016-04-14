@@ -489,14 +489,25 @@ class FileManagerController extends Controller {
     private function setRelativePath($folder){
         $home = explode('/', $this->homePath);
         $publicPath = str_replace($this->homePath, '', $folder);
-
+        $append = $this->getAppend();
         if(last($home) != "public"){
-            $this->publicPath = 'assets'.last($home).$publicPath;
+            $this->publicPath = $append.last($home).$publicPath;
         } else {
-            $this->publicPath = 'assets'.$publicPath;
+            $this->publicPath = $append.$publicPath;
         }
     }
 
+    /**
+     * Get Append to url
+     * @return mixed|string
+     */
+    private function getAppend(){
+        if(config('filemanager.appendUrl') != null){
+            return config('filemanager.appendUrl');
+        } else {
+            return '';
+        }
+    }
 
     /**
      * @param $file

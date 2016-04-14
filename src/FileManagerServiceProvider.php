@@ -21,19 +21,27 @@ class FileManagerServiceProvider extends ServiceProvider
         }
 
         $this->loadViewsFrom(__DIR__.'/views/', 'filemanager');
+
         /**
          * Publishes Lang files
          */
         $this->publishes([
             realpath(__DIR__.'/resources/lang') => $this->app->basePath().'/resources/lang'
-        ]);
+        ], 'lang');
 
         /**
-         * Piblishes Public Assets
+         * Publish Public Assets
          */
         $this->publishes([
             __DIR__.'/public' => public_path('filemanager_assets'),
         ], 'public');
+
+        /**
+         * Publish config file
+         */
+        $this->publishes([
+            __DIR__.'/config/config.php' => config_path('filemanager.php')
+        ], 'config');
 
     }
 
