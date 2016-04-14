@@ -27,6 +27,9 @@ $(document).ready(function(){
         current_file = null;
         actionFileButtons();
         addLoading();
+        if(globalFilter != null){
+            filter = globalFilter;
+        }
         $.ajax({
             url: url_process,
             type: "POST",
@@ -37,7 +40,6 @@ $(document).ready(function(){
             actionRightMenu();
             $("#files_container").empty();
             $("#files_container").html(data);
-
         }).fail(function(data) {
             console.log('error');
         });
@@ -155,6 +157,7 @@ $(document).ready(function(){
                 // its results are destroyed every time the menu is hidden
                 // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
                 current_file = null;
+                temp_folder = null;
                 if($trigger.data('type')){
                     if($trigger.data('type') != 'file'){
                         current_file = {
@@ -164,9 +167,19 @@ $(document).ready(function(){
                             size : $($trigger).data('size'),
                             preview : $($trigger).find('img').attr("src")
                         };
-                        console.log(current_file);
+                    } else {
+                        current_file = {
+                            name : $($trigger).find('.name-file').text(),
+                            path : $($trigger).data('path'),
+                            type : $($trigger).data('type'),
+                            size : $($trigger).data('size'),
+                            preview : false
+                        };
                     }
+                } else {
+                    temp_folder = $($trigger).data('folder');
                 }
+                console.log($trigger);
 
                 return {
                     callback: function(key, options) {
@@ -189,7 +202,7 @@ $(document).ready(function(){
         $elements = [];
 
         // Only for supported mimes
-        if(current_file != undefined && current_file.type != 'file'){
+        if(current_file != undefined && current_file.preview != false){
             var preview = {
                     name: "Preview",
                     icon: 'fa-eye',
@@ -199,17 +212,39 @@ $(document).ready(function(){
                     }
                 };
 
-            var download = {
-                name: "Download",
-                icon: 'fa-download',
-                callback: function(key, options) {
 
-                }
-            };
 
             $elements.push(preview);
-            $elements.push(download);
+
         }
+
+        var download = {
+            name: "Download",
+            icon: 'fa-download',
+            callback: function(key, options) {
+                if(path_folder != ""){
+                    path_folder += '/';
+                }
+                var type;
+                if(current_file){
+                    type = 'file';
+                    var win = window.open(url_download+'?path='+path_folder + current_file.name + '&name='+current_file.name+'&type='+type, '_self');
+                } else {
+                    type = 'folder';
+                    var win = window.open(url_download+'?path='+temp_folder + '&name=' + temp_folder + '&type='+type, '_self');
+                }
+
+
+                if(win){
+                    //Browser has allowed it to be opened
+                    win.focus();
+                }else{
+                    //Broswer has blocked it
+                    alert('Please allow popups for this site');
+                }
+
+            }
+        };
 
         var cut = {
             name: "Cut",
@@ -261,7 +296,7 @@ $(document).ready(function(){
                 }
             }
         };
-
+        $elements.push(download);
         $elements.push(cut);
         $elements.push(paste);
         $elements.push(del);
@@ -392,6 +427,32 @@ $(document).ready(function(){
      */
     $(document).on('click', '.file', function(e){
         e.preventDefault();
+        var isInIFrame = (window.location != window.parent.location);
+        if(isInIFrame == true){
+            var windowParent = window.parent;
+            if(typeCallback == 'featured'){
+                var appendId = location.search.split('appendId=')[1] ? location.search.split('appendId=')[1] : null;
+                console.log(location.search.split('appendId='));
+                var image = {
+                    "path": $(this).data('path'),
+                    "thumb": $(this).data('asset'),
+                    "appendId": appendId
+                };
+                windowParent.OnMessage(image);
+            }
+
+            if(typeCallback == 'editor'){
+                editor = window.parent.$(window.parent.document).find("#"+editorId);
+                fileRequested = {
+                    name : $(this).find('.name-file').text(),
+                    path : $(this).data('asset'),
+                };
+                console.log(fileRequested);
+                editor.redactor('imagemanager.set', fileRequested);
+            }
+            return false;
+        }
+
         if($(this).hasClass('active')){
             current_file = null;
             $(this).removeClass('active');
