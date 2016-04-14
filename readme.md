@@ -3,7 +3,7 @@
 Custom file manager for Laravel 5
 
 ### Version
-1.0
+1.2 - Still in beta. Some functions may not work.
 
 ### Installation
 
