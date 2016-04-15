@@ -5,12 +5,12 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/vendor/dmuploader/css/uploader.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/css/filemanager.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.contextMenu.css') }}">
-
+    <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/vendor/highlight/styles/agate.css') }}">
 @stop
 
 @section('content')
 
-        <!-- Modal Create Folder -->
+    <!-- Modal Create Folder -->
     <div class="modal fade fill-in" id="modalCreateFolder" tabindex="-1" role="dialog" aria-labelledby="modalFillInLabel" aria-hidden="true">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="pg-close"></i>
@@ -39,6 +39,38 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    <!-- End Modal Create Folder -->
+
+    <!-- Modal Create Folder -->
+    <div class="modal fade fill-in" id="modalRename" tabindex="-1" role="dialog" aria-labelledby="modalFillInLabel" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="pg-close"></i>
+        </button>
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-left p-b-5"><span class="semi-bold">Rename</span> this file</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input type="text" placeholder="Your new name" class="form-control input-lg" id="new-name" name="new-name">
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <button type="button" id="rename-file" class="btn btn-primary btn-lg btn-large fs-15">Rename</button>
+                        </div>
+                    </div>
+                    <p class="text-right hinted-text p-t-10 p-r-10">If new name exists, some data will be added to your new name</p>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- End Modal Create Folder -->
 
     <!-- Modal Preview -->
     <div class="modal fade slide-up disable-scroll" id="previewInfo" tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false">
@@ -70,7 +102,7 @@
             <!-- /.modal-content -->
         </div>
     </div>
-    <!-- /.modal-dialog -->
+    <!-- End Modal Preview -->
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -86,7 +118,10 @@
                         </button>
                     </div>
                     <ul class="nav navbar-nav">
-                        <li><button class="btn btn-complete btn-cons" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-upload"></i> Upload</button></li>
+                        <div class="upload_div hide">
+                            <input type="file" name="files[]" id="single-upload-file" multiple="multiple" title="Click to add Files">
+                        </div>
+                        <li><button class="btn btn-complete btn-cons" id="single-upload"<i class="fa fa-upload"></i> Upload</button></li>
                         <li><button class="btn btn-complete btn-cons" data-toggle="modal" data-target="#modalCreateFolder"><i class="fa fa-folder"></i> Create Folder</button></li>
                         <li class="home"><button class="btn "><i class="fa fa-home"></i></button></li>
                         <li class="refresh"><button class="btn "><i class="fa fa-refresh"></i></button></li>
@@ -143,7 +178,7 @@
                 </select>
             </div>
             <div class="col-xs-12 col-sm-10">
-                <div class="row" id="files_container">
+                <div class="row upload_div" id="files_container">
                 </div>
             </div>
 
@@ -162,6 +197,8 @@
 
     <script src="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.contextMenu.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.ui.position.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('/filemanager_assets/vendor/highlight/highlight.pack.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('/filemanager_assets/vendor/dmuploader/js/dmuploader.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/filemanager_assets/vendor/dmuploader/js/gallery.js') }}" type="text/javascript"></script>
@@ -198,12 +235,17 @@
             url_cfolder = "{{ url('admin/filemanager/createFolder') }}";
             url_delete  = "{{ url('admin/filemanager/delete') }}";
             url_download = "{{ url('admin/filemanager/download') }}";
+            url_preview  = "{{ url('admin/filemanager/preview') }}";
+            url_move  = "{{ url('admin/filemanager/move') }}";
+            url_rename  = "{{ url('admin/filemanager/rename') }}";
             image_path  = "{{ asset('/') }}";
             homeFolder  = "{{ last($home) }}";
             path_folder = "";
             current_file = null;
+            cutted_file = null;
             temp_folder = null;
             globalFilter = null;
+
             /**
              * Languages variables
              */

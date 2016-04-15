@@ -61,6 +61,33 @@ class FileFunctionsService
     }
 
     /**
+     * Moving a file to new path
+     * @param $oldFile
+     * @param $newPath
+     * @return array
+     */
+    public function rename($oldFile, $newPath, $name, $type){
+
+        $permissions = $this->checkPerms($newPath);
+        if($permissions == 400 || $permissions == 700){
+            return ['error' => "You don't have permissions to move to this folder"];
+        }
+
+        $name = (!$this->checkFileExists($newPath,$name)) ? $name : $this->checkFileExists($newPath,$name);
+
+        if(rename($oldFile, $newPath.$name)){
+            if($type = 'rename'){
+                return ['success' => 'File '.$name.' renamed successfully'];
+            } else {
+                return ['success' => 'File '.$name.' moved successfully'];
+            }
+
+        } else {
+            return ['error' => "Error moving this file"];
+        }
+    }
+
+    /**
      * Deletes a file or Folder
      * @param $data
      * @param $folder
@@ -90,7 +117,11 @@ class FileFunctionsService
     }
 
 
-
+    /**
+     * Removes a folder recursively
+     *
+     * @param $dir
+     */
     private function deleteFolderRecursive($dir) {
         if (is_dir($dir)) {
             $objects = scandir($dir);
@@ -116,12 +147,11 @@ class FileFunctionsService
     private function upload(UploadedFile $file, $folder){
 
         $originalName = $file->getClientOriginalName();
-
-        $originalNameWithoutExt = substr($originalName, 0, strlen($originalName) - 4);
+        $originalNameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);
         $newName = $this->sanitize($originalNameWithoutExt).".".$file->getClientOriginalExtension();
         $path = $this->path.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR;
 
-        $this->checkFileExists($path,$newName);
+//        $this->checkFileExists($path,$newName);
 
         $name = (!$this->checkFileExists($path,$newName)) ? $newName : $this->checkFileExists($path,$newName);
 
@@ -150,6 +180,16 @@ class FileFunctionsService
         } else {
             return false;
         }
+    }
+
+    /**
+     * Check permissions of folder
+     * @param $path
+     * @return string
+     */
+    private function checkPerms($path){
+        clearstatcache(null, $path);
+        return decoct( fileperms($path) & 0777 );
     }
 
     /**

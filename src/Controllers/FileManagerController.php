@@ -27,7 +27,6 @@ class FileManagerController extends Controller {
 
     protected $exceptExtensions;
 
-
     public function __construct(){
         $this->homePath = config('filemanager.homePath');
         $this->exceptFiles = collect(config('filemanager.exceptFiles'));
@@ -36,6 +35,12 @@ class FileManagerController extends Controller {
         $this->globalFilter = null;
     }
 
+    /**
+     * Show Home Files
+     * @param CookieJar $cookieJar
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getIndex(CookieJar $cookieJar, Request $request){
 //        $files = $this->getFiles($this->homePath."/media", 'mime', 'all');
 //        dump($files);
@@ -44,6 +49,10 @@ class FileManagerController extends Controller {
         return $this->firstViewThatExists('admin/filemanager/index', 'filemanager::index');
     }
 
+    /**
+     * Show FileManager dialog based
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getDialog(){
         return $this->firstViewThatExists('admin/filemanager/dialog', 'filemanager::dialog');
     }
@@ -68,8 +77,6 @@ class FileManagerController extends Controller {
             //Se relative Path
             $this->setRelativePath($folder);
 
-
-
             $order = $request->get('sort');
             if(!$order){
                 $order = 'type';
@@ -88,7 +95,6 @@ class FileManagerController extends Controller {
 
     /**
      * Upload the File
-     *
      * @param Request $request
      */
     public function uploadFile(Request $request){
@@ -98,7 +104,6 @@ class FileManagerController extends Controller {
 
     /**
      * Create a new folder
-     *
      * @param Request $request
      * @return mixed
      */
@@ -107,24 +112,34 @@ class FileManagerController extends Controller {
         return $data;
     }
 
+    /**
+     * Remove file or Folder recursively
+     * @param Request $request
+     * @return mixed
+     */
     public function delete(Request $request){
         $data = FileFunctionsFacade::delete($request["data"], $request["folder"], $request["type"]);
         return $data;
     }
 
+    /**
+     * Download a file or Folder in zip
+     * @param Request $request
+     * @return bool
+     */
     public function download(Request $request){
 
         if($request["type"] == 'file'){
             if($request["name"] != null){
-                return response()->download($request["path"], $request["name"]);
+                return response()->download($this->homePath.DIRECTORY_SEPARATOR.$request["path"], $request["name"]);
             } else {
-                return response()->download($request["path"]);
+                return response()->download($this->homePath.DIRECTORY_SEPARATOR.$request["path"]);
             }
         } elseif($request["type"] == 'folder'){
             $cleaned = explode('/',$request["name"]);
             $cleaned = last($cleaned);
             $generatedZip = storage_path().'/filemanager/'.$cleaned.'.zip';
-            $folder = public_path().'/'.$request["path"].'/';
+            $folder = $this->homePath.'/'.$request["path"].'/';
             Zipper::make($generatedZip)->add($folder)->close();
             $headers = array(
                 'Content-Type' => 'application/zip',
@@ -136,6 +151,91 @@ class FileManagerController extends Controller {
             }
         }
         return false;
+    }
+
+    /**
+     * Return a file content if exists or false;
+     * @param Request $request
+     * @return array
+     */
+    public function preview(Request $request){
+        if($request->has('type') && $request->has('file')){
+            $type = $request["type"];
+            $filename = $request["file"];
+            if(file_exists($filename)){
+                if($type == 'text'){
+                    $lines = $this->getLines($filename);
+                    $handle = fopen($filename, "rw");
+                    $size = filesize($filename);
+                    $cutted = false;
+                    if($lines > 1000){
+                        $size = 12000;
+                        $cutted = true;
+                    }
+                    $contents = fread($handle, $size);
+                    $contents = ($cutted) ? $contents.PHP_EOL.PHP_EOL.'Important: File is too big. Has been cut!' : $contents;
+                    fclose($handle);
+
+                    $type = File::mimeType($filename);
+                    $response = Response::make($contents, 200);
+                    $response->header("Content-Type", $type);
+                    return $response;
+                }
+            } else {
+                return ['error' => "File not exists"];
+            }
+        } else {
+            return ['error' => "Parameters needed"];
+        }
+    }
+
+    /**
+     * Move a file to new destination
+     * @param Request $request
+     * @return array
+     */
+    public function move(Request $request){
+        if($request->has('oldFile')){
+            $oldFile = $this->homePath.DIRECTORY_SEPARATOR.$request->get('oldFile');
+            if(!$request->has('newPath')){
+                $newPath = $this->homePath.DIRECTORY_SEPARATOR;
+            } else {
+                $newPath = $this->homePath.DIRECTORY_SEPARATOR.$request->get('newPath').DIRECTORY_SEPARATOR;
+            }
+            $fileName = explode('/', $request->get('oldFile'));
+            $data = FileFunctionsFacade::rename($oldFile, $newPath, end($fileName), 'move');
+            return $data;
+        } else {
+            return ['error' => "Parameters needed"];
+        }
+    }
+
+
+    public function rename(Request $request){
+        if($request->has('file') && $request->has('newName')){
+            $fileName = explode('/', $request->get('file'));
+            $fileName = end($fileName);
+            $path = str_replace($fileName, '', $request->get('file'));
+            $data = FileFunctionsFacade::rename($request->get('file'), $path, $request->get('newName'), 'rename');
+            return $data;
+        } else {
+            return ['error' => "Parameters needed"];
+        }
+    }
+
+    /**
+     * Get Lines of a file
+     * @param $file
+     * @return int
+     */
+    private function  getLines($file){
+        $f = fopen($file, 'rb');
+        $lines = 0;
+        while (!feof($f)) {
+            $lines += substr_count(fread($f, 8192), "\n");
+        }
+        fclose($f);
+        return $lines;
     }
 
     /**
@@ -153,10 +253,7 @@ class FileManagerController extends Controller {
         $files = [];
         foreach ($dir_iterator as $file) {
             if (!$file->isDot() && !$this->exceptExtensions->contains($file->getExtension()) && !$this->exceptFolders->contains($file->getBasename()) && !$this->exceptFiles->contains($file->getBasename())  && $this->accept($file)) {
-//                dump($this->publicPath);
-//                dump(public_path());
-//                dump(base_path());
-//                dump($file->getPath());
+
                 if($file->isReadable()){
                     $fileInfo = [
                         'name'  =>  trim($file->getBasename()),
@@ -169,14 +266,6 @@ class FileManagerController extends Controller {
                         'asset' =>  url($this->publicPath.'/'.$file->getBasename()),
                         'can'   =>  true
                     ];
-
-
-//                    switch($fileInfo["mime"]){
-//                        case "image":
-//                            $fileInfo['path'] = substr($file->getRealPath(), strlen(getcwd())+1);
-//                            break;
-//                        case "audio"
-//                    }
 
                     if($file->getType() == 'dir'){
 
@@ -521,7 +610,7 @@ class FileManagerController extends Controller {
      * @param $path
      * @return string
      */
-    function checkPerms($path){
+    private function checkPerms($path){
         clearstatcache(null, $path);
         return decoct( fileperms($path) & 0777 );
     }
