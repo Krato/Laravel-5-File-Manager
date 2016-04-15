@@ -14,15 +14,15 @@ $(document).ready(function(){
      uploadMethod = function(){
 
         //Uploader
-        $('#files_container').dmUploader({
+        $('.upload_div').dmUploader({
             url: url_upload,
             dataType: 'json',
-            allowedTypes: ['image/*|application/*|text/plain'],
+            allowedTypes: ['image/*|application/*|text/*'],
             extraData: function(){
                 return {'folder' : path_folder }
             },
             onInit: function () {
-                $.gallery.addLog("Init");
+                //$.gallery.addLog("Init");
             },
             onDrag: function () {
                 //console.log("DragOn");
@@ -51,7 +51,7 @@ $(document).ready(function(){
 
                         reader.onload = function (e) {
                             img.attr('src', e.target.result);
-                        }
+                        };
 
                         reader.readAsDataURL(file);
 
@@ -92,7 +92,12 @@ $(document).ready(function(){
                 console.log("dada");
             },
             onFileTypeError: function (file) {
-                //                $.gallery.addLog(file);
+                //               $.gallery.addLog(file);
+                new PNotify({
+                    title: 'Error',
+                    text: 'File type forbidden',
+                    type: 'error'
+                });
             },
             onFileSizeError: function (file) {
                 //                $.gallery.addLog(file);

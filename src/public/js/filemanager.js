@@ -16,6 +16,14 @@ $(document).ready(function(){
     };
 
 
+    checkFileSelected = function(){
+        if(current_file === undefined || current_file === null) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     /**
      * Get folder and files data
      *
@@ -44,8 +52,6 @@ $(document).ready(function(){
             console.log('error');
         });
     };
-
-
 
     /**
      * Create a new folder on current Folder
@@ -84,6 +90,11 @@ $(document).ready(function(){
         });
     };
 
+    /**
+     * Remove file or folder
+     * @param name
+     * @param type
+     */
     deleteFileorFolder = function(name, type){
         $.ajax({
             url: url_delete,
@@ -111,6 +122,76 @@ $(document).ready(function(){
                 text: 'Error to process request',
                 type: 'error'
             });
+        });
+    };
+
+    /**
+     * Move file to new destination
+     * @param fileOld
+     * @param newPath
+     */
+    moveFile = function(fileOld, newPath){
+        $.ajax({
+            url: url_move,
+            type: "POST",
+            data: { 'oldFile' : fileOld, 'newPath' : newPath }
+        }).done(function( data ) {
+            if(data.error){
+                new PNotify({
+                    title: 'Error',
+                    text: data.error,
+                    type: 'error'
+                });
+            } else {
+                new PNotify({
+                    title: 'Success!',
+                    text: data.success,
+                    type: 'success'
+                });
+                cutted_file = null;
+                $('.refresh').trigger('click');
+            }
+
+        }).fail(function(data) {
+            new PNotify({
+                title: 'Error',
+                text: 'Error to process request',
+                type: 'error'
+            });
+        });
+    };
+
+    renameFile = function(newName){
+        console.log(current_file);
+        console.log(newName);
+        $.ajax({
+            url: url_rename,
+            type: "POST",
+            data: { 'file' : current_file.path, 'newName' : newName }
+        }).done(function( data ) {
+            if(data.error){
+                new PNotify({
+                    title: 'Error',
+                    text: data.error,
+                    type: 'error'
+                });
+            } else {
+                new PNotify({
+                    title: 'Folder Created!',
+                    text: data.success,
+                    type: 'success'
+                });
+                $('.refresh').trigger('click');
+            }
+            $('#modalRename').modal('hide')
+
+        }).fail(function(data) {
+            new PNotify({
+                title: 'Error',
+                text: 'Error to process request',
+                type: 'error'
+            });
+            $('#modalRename').modal('hide')
         });
     };
 
@@ -149,13 +230,13 @@ $(document).ready(function(){
         }
     };
 
+    /**
+     * Right menu Action Builder
+     */
     actionRightMenu = function(){
         $.contextMenu({
-            selector: '.filemanager-item',
+            selector: '.filemanager-item, .upload_div',
             build: function($trigger, e) {
-                // this callback is executed every time the menu is to be shown
-                // its results are destroyed every time the menu is hidden
-                // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
                 current_file = null;
                 temp_folder = null;
                 if($trigger.data('type')){
@@ -165,6 +246,7 @@ $(document).ready(function(){
                             path : $($trigger).data('path'),
                             type : $($trigger).data('type'),
                             size : $($trigger).data('size'),
+                            relativePath : $($trigger).data('asset'),
                             preview : $($trigger).find('img').attr("src")
                         };
                     } else {
@@ -173,13 +255,13 @@ $(document).ready(function(){
                             path : $($trigger).data('path'),
                             type : $($trigger).data('type'),
                             size : $($trigger).data('size'),
+                            relativePath : $($trigger).data('asset'),
                             preview : false
                         };
                     }
                 } else {
                     temp_folder = $($trigger).data('folder');
                 }
-                console.log($trigger);
 
                 return {
                     callback: function(key, options) {
@@ -194,7 +276,7 @@ $(document).ready(function(){
     };
 
     /**
-     * Generates
+     * Generates menu options based on live features and actions
      * @returns {Array}
      */
     function generateContextMenu() {
@@ -207,15 +289,23 @@ $(document).ready(function(){
                     name: "Preview",
                     icon: 'fa-eye',
                     callback: function(key, options) {
-                        console.log(current_file);
                         $('.preview').trigger('click');
                     }
                 };
-
-
-
             $elements.push(preview);
 
+            var rename = {
+                name: "Rename",
+                icon: 'fa-keyboard-o',
+                callback: function(key, options) {
+                    if( checkFileSelected()) {
+                        console.log(current_file);
+                        $("#new-name").val(current_file.name);
+                        $('#modalRename').modal('show');
+                    }
+                }
+            };
+            $elements.push(rename);
         }
 
         var download = {
@@ -250,14 +340,22 @@ $(document).ready(function(){
             name: "Cut",
             icon: 'fa-scissors',
             callback: function(key, options) {
-
+                new PNotify({
+                    title: 'File cutted',
+                    text: 'Now chose new destination',
+                    type: 'info'
+                });
+                cutted_file = (path_folder != '' ? path_folder+ '/' : '') + current_file.name;
+                $('.move').removeClass('move').addClass('active paste').find('button').html('<i class="fa fa-paste"> Paste');
             }
         };
         var paste = {
             name: "Paste",
             icon: 'fa-clipboard',
+            disabled: (cutted_file != null ? false : true),
             callback: function(key, options) {
-
+                moveFile(cutted_file, path_folder);
+                $('.paste').removeClass('paste active').addClass('move').find('button').html('<i class="fa fa-arrows"> Move');
             }
         };
         var del = {
@@ -296,6 +394,10 @@ $(document).ready(function(){
                 }
             }
         };
+
+
+
+
         $elements.push(download);
         $elements.push(cut);
         $elements.push(paste);
@@ -324,8 +426,8 @@ $(document).ready(function(){
                 }
                 if(current_file.type == 'audio'){
                     var html = '<div class="plyr">' +
-                                    '<audio controls>' +
-                                        '<source src="'+ current_file.path +'" type="audio/mpeg">' +
+                                    '<audio controls crossorigin>' +
+                                        '<source src="'+ current_file.relativePath +'" type="audio/mpeg">' +
                                         'Your browser does not support the audio element.' +
                                     '</audio>' +
                                 '</div>';
@@ -334,9 +436,9 @@ $(document).ready(function(){
                 }
                 if(current_file.type == 'video'){
                     var html = '<div class="plyr">' +
-                                    '<video  controls>' +
-                                        '<source src="'+ current_file.path +'" type="video/mp4">' +
-                                        '<a href="'+ current_file.path +'">Download</a>' +
+                                    '<video  controls crossorigin>' +
+                                        '<source src="'+ current_file.relativePath +'" type="video/mp4">' +
+                                        '<a href="'+ current_file.preview +'">Download</a>' +
                                     '</video>' +
                                 '</div>';
                     $('#modal-preview').append(html);
@@ -345,11 +447,68 @@ $(document).ready(function(){
                 if(current_file.type == 'pdf'){
                    new PDFObject({ url: current_file.path, height: '500px' }).embed("modal-preview");
                 }
+                if(current_file.type == 'text'){
 
-                $('#previewInfo').modal('toggle')
+                    readStringFromFileAtPath(current_file);
+                    var html = '<div class="code-editor"> <span class="control"></span> <span class="control"></span><span class="control"></span>' +
+                                    '<pre>' +
+                                        '<code class="language-markup">' +
+                                            'Loading...' +
+                                        '</code>' +
+                                    '</pre>' +
+                                '</div>';
+                    $('#modal-preview').append(html);
+                }
+
+                $('#previewInfo').modal('toggle');
             }
         }
     };
+
+    /**
+     * Read text input (text, js, css, etc)
+     */
+    function readStringFromFileAtPath(fileToRead){
+        $.ajax({
+            url: url_preview,
+            type: "POST",
+            data: { 'type' : fileToRead.type ,  'file' : fileToRead.path },
+            dataType: "text",
+        }).done(function( data ) {
+            if(data.error){
+                new PNotify({
+                    title: 'Error',
+                    text: data.error,
+                    type: 'error'
+                });
+                $('#modal-preview').empty().append('Error');
+                return false;
+            } else {
+                var demo = hljs.highlightAuto(data);
+                var html = '<div class="code-editor"> <span class="control"></span> <span class="control"></span><span class="control"></span>' +
+                                '<pre>' +
+                                    '<code id="code-ajax-content"">' +
+                                        demo.value +
+                                    '</code>' +
+                                '</pre>' +
+                            '</div>';
+                $('#modal-preview').empty().html(html);
+
+                //hljs.highlightBlock($('#code-ajax-content')[0]);
+                //Prism.highlightElement($('#code-ajax-content')[0]);
+                return true;
+            }
+        }).fail(function(data) {
+            new PNotify({
+                title: 'Error',
+                text: 'Error to process request',
+                type: 'error'
+            });
+            $('#modal-preview').empty().append('Error');
+            return false;
+        });
+
+    }
 
     /**
      * Close event for preview modal
@@ -359,8 +518,8 @@ $(document).ready(function(){
         if(player != undefined || player != null){
             player.destroy();
         }
-        current_file = null;
-    })
+        //current_file = null;
+    });
 
 
 
@@ -371,6 +530,16 @@ $(document).ready(function(){
     /*****************
      *    EVENTS     *
      *****************/
+
+    /**
+     * Upload single event
+     */
+    $("#single-upload").click(function(){
+        uploadMethod();
+        $("#single-upload-file").click();
+    });
+
+
     $('.filter').click(function(){
         var filter = $(this).data('filter');
         var sort = $("#sort-by").val();
@@ -462,6 +631,7 @@ $(document).ready(function(){
                 path : $(this).data('path'),
                 type : $(this).data('type'),
                 size : $(this).data('size'),
+                relativePath : $(this).data('asset'),
                 preview : $(this).find('img').attr("src")
             };
             $('.file').removeClass('active');
@@ -471,12 +641,28 @@ $(document).ready(function(){
         return false;
     });
 
-
+    /**
+     * Button new folder event button
+     */
     $(document).on('click', '#create-folder', function(e){
         var new_folder = $("#folder-name").val();
         createFolder(new_folder);
     });
 
+    /**
+     * Rename file event button
+     */
+    $(document).on('click', '#rename-file', function(e){
+        var new_name = $("#new-name").val();
+        renameFile(new_name);
+    });
+
+
+
+
+    /**
+     * Button delete event
+     */
     $(document).on('click', '.delete', function(e){
         swal(
             {  title: "Are you sure?",
@@ -492,6 +678,26 @@ $(document).ready(function(){
         );
     });
 
+    /**
+     * Move event button
+     */
+    $(document).on('click', '.move', function(e){
+        if( checkFileSelected() ) {
+            cutted_file = (path_folder != '' ? path_folder+ '/' : '') + current_file.name;
+            $(this).removeClass('move').addClass('paste');
+            $(this).find('button').html('<i class="fa fa-paste"> Paste');
+        }
+    });
+
+    /**
+     * Paste Event button
+     */
+    $(document).on('click', '.paste', function(e){
+        if( cutted_file != null ) {
+            moveFile(cutted_file, path_folder);
+            $(this).removeClass('paste active').addClass('move').find('button').html('<i class="fa fa-arrows"> Move');
+        }
+    });
 
 
 

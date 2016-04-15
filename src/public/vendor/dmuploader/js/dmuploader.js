@@ -157,7 +157,7 @@
       // Check file type
       if((this.settings.allowedTypes != '*') &&
           !file.type.match(this.settings.allowedTypes)){
-
+        console.log(file);
         this.settings.onFileTypeError.call(this.element, file);
 
         continue;
