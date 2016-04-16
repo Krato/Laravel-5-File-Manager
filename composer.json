@@ -5,6 +5,7 @@
   "homepage": "https://github.com/Krato/Laravel-5-File-Manager",
   "license": "MIT",
   "minimum-stability": "dev",
+  "prefer-stable" : true,
   "authors": [
     {
       "name": "Eric Lagarda",
