@@ -1,7 +1,7 @@
 {
   "name": "infinety-es/filemanager",
   "description": "Laravel 5 Filemanager",
-  "keywords": ["gallery", "photo", "laravel 5", "infinety"],
+  "keywords": ["file", "manager", "laravel 5", "infinety"],
   "homepage": "https://github.com/Krato/Laravel-5-File-Manager",
   "license": "MIT",
   "minimum-stability": "dev",
