@@ -189,7 +189,6 @@
 
 @section('custom_js')
     <script src="{{ asset('admin_theme/assets/plugins/classie/classie.js') }}" type="text/javascript"></script>
-
     <script src="https://cdn.plyr.io/1.5.18/plyr.js" type="text/javascript"></script>
     <script src="{{ asset('/filemanager_assets/vendor/pdfobject.js') }}" type="text/javascript"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js'></script>
@@ -206,7 +205,7 @@
         (function(d, p){
             var a = new XMLHttpRequest(),
                     b = d.body;
-            a.open('GET', p, true);
+            a.open("GET", p, true);
             a.send();
             a.onload = function() {
                 var c = d.createElement('div');
@@ -214,8 +213,7 @@
                 c.innerHTML = a.responseText;
                 b.insertBefore(c, b.childNodes[0]);
             };
-        })(document, 'https://cdn.plyr.io/1.5.18/sprite.svg');
-
+        })(document, "https://cdn.plyr.io/1.5.18/sprite.svg");
     </script>
 
     <script>
@@ -250,7 +248,7 @@
              * Languages variables
              */
 
-            text_upload = "{!! trans('kgallery.upload.info') !!}";
+            text_upload = "{!! trans('filemanager.upload.info') !!}";
 
 
         });

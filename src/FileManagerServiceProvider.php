@@ -3,6 +3,7 @@
 namespace Infinety\FileManager;
 
 use Illuminate\Support\ServiceProvider;
+use Infinety\FileManager\Helpers\FileManagerHelper;
 
 class FileManagerServiceProvider extends ServiceProvider
 {
@@ -52,6 +53,18 @@ class FileManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        $this->app->singleton('FileManagerHelper', function () {
+            return new FileManagerHelper;
+        });
+
+
+        $this->app->bind('filemanager',function($app){
+            return new MenuManager($app);
+        });
+
+        $this->app->singleton('filemanager', 'Infinety\FileManager\Helpers\FileManagerHelper');
+
         $this->app->make('Infinety\FileManager\Controllers\FileManagerController');
 //        \Route::group(['prefix' => 'admin/filemanager', 'middleware' => 'auth'], function() {
 //            \Route::controller('/', 'Infinety\FileManager\Controllers\FileManagerController');
