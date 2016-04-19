@@ -218,7 +218,7 @@
             homeFolder  = "{{ last($home) }}";
             path_folder = "";
             current_file = null;
-            globalFilter = 'image';
+            globalFilter = "{{ (isset($_GET['filter'])) ? $_GET['filter'] : 'image' }}";
             typeCallback = "{{ (isset($_GET['type'])) ? $_GET['type'] : 'featured' }}";
             editorId =  "{{ (isset($_GET['editor'])) ? $_GET['editor'] : null }}";
             /**
