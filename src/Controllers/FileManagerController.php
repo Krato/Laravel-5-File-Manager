@@ -5,13 +5,12 @@ use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use starter\Http\Controllers\Controller;
-
+use Illuminate\Routing\Controller as BaseController;
 use Infinety\FileManager\Facades\FileFunctionsFacade;
-
 use DirectoryIterator;
 use File;
-class FileManagerController extends Controller {
+
+class FileManagerController extends BaseController {
 
     /**
      * Public Storage
