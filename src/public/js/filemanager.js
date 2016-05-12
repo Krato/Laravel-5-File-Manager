@@ -161,13 +161,15 @@ $(document).ready(function(){
         });
     };
 
-    renameFile = function(newName){
-        console.log(current_file);
-        console.log(newName);
+    /**
+     * Function to rename files or Folders
+     * @param newName
+     */
+    renameFileorFolder = function(path, newName, type){
         $.ajax({
             url: url_rename,
             type: "POST",
-            data: { 'file' : current_file.path, 'newName' : newName }
+            data: {'type': type, 'file' : path, 'newName' : newName }
         }).done(function( data ) {
             if(data.error){
                 new PNotify({
@@ -177,7 +179,7 @@ $(document).ready(function(){
                 });
             } else {
                 new PNotify({
-                    title: 'Folder Created!',
+                    title: (type == 'file') ? 'File  Renamed!' : 'Folder Renamed!',
                     text: data.success,
                     type: 'success'
                 });
@@ -249,6 +251,13 @@ $(document).ready(function(){
                             relativePath : $($trigger).data('asset'),
                             preview : $($trigger).find('img').attr("src")
                         };
+
+                        if(current_file.type == 'image'){
+                            var dimensions = $($trigger).data('dimension').split("x");
+                            current_file.height = dimensions[0];
+                            current_file.width = dimensions[1];
+                        }
+
                     } else {
                         current_file = {
                             name : $($trigger).find('.name-file').text(),
@@ -262,7 +271,9 @@ $(document).ready(function(){
                 } else {
                     temp_folder = $($trigger).data('folder');
                 }
-
+                $('.file').removeClass('active');
+                $($trigger).addClass('active');
+                actionFileButtons();
                 return {
                     callback: function(key, options) {
                         process(key, options)
@@ -271,10 +282,20 @@ $(document).ready(function(){
                     },
                     items: generateContextMenu()
                 };
+            },
+            events: {
+                hide: function($trigger){
+                    if(cutted_file == null){
+                        current_file = null;
+                    } else {
+                        $('.file').removeClass('active');
+                        actionFileButtons();
+                    }
+
+                }
             }
         });
     };
-
     /**
      * Generates menu options based on live features and actions
      * @returns {Array}
@@ -293,24 +314,42 @@ $(document).ready(function(){
                     }
                 };
             $elements.push(preview);
+        }
 
-            var rename = {
-                name: "Rename",
-                icon: 'fa-keyboard-o',
-                callback: function(key, options) {
-                    if( checkFileSelected()) {
-                        console.log(current_file);
-                        $("#new-name").val(current_file.name);
+        var rename = {
+            name: "Rename",
+            icon: 'fa-keyboard-o',
+            disabled: (current_file != null ? false : true),
+            callback: function(key, options) {
+                if($(this).data('type')){
+                    if( checkFileSelected() ) {
+                        var ext = "." + current_file.name.split('.').pop();
+                        var name = current_file.name.replace(/\.[^/.]+$/, "");
+                        $("#new-name").val(name);
+                        $("#new-ext").html(ext).removeClass("hide");
+                        $("#data-rename").removeClass('input').addClass('input-group');
+                        $('#modalRename').find(".file-info").removeClass("hide");
+                        $('#modalRename').find("#type-rename").val("file");
                         $('#modalRename').modal('show');
                     }
                 }
-            };
-            $elements.push(rename);
-        }
+
+                if($(this).data('folder')){
+                    $("#new-name").val($(this).data('name'));
+                    $("#new-ext").addClass("hide");
+                    $("#data-rename").removeClass('input-group').addClass('input');
+                    $('#modalRename').find(".folder-info").removeClass("hide");
+                    $('#modalRename').find("#type-rename").val("folder");
+                    $('#modalRename').modal('show');
+                }
+            }
+        };
+
 
         var download = {
             name: "Download",
             icon: 'fa-download',
+            disabled: (current_file != null ? false : true),
             callback: function(key, options) {
                 if(path_folder != ""){
                     path_folder += '/';
@@ -335,32 +374,40 @@ $(document).ready(function(){
 
             }
         };
+        if(current_file != undefined && current_file.preview != false){
+            var cut = {
+                name: "Cut",
+                icon: 'fa-scissors',
+                callback: function(key, options) {
+                    new PNotify({
+                        title: 'File cutted',
+                        text: 'Now chose new destination',
+                        type: 'info'
+                    });
+                    cutted_file = (path_folder != '' ? path_folder+ '/' : '') + current_file.name;
+                    $('.move').removeClass('move').addClass('active paste').find('button').html('<i class="fa fa-paste"> Paste');
+                }
+            };
+            $elements.push(cut);
+        }
 
-        var cut = {
-            name: "Cut",
-            icon: 'fa-scissors',
-            callback: function(key, options) {
-                new PNotify({
-                    title: 'File cutted',
-                    text: 'Now chose new destination',
-                    type: 'info'
-                });
-                cutted_file = (path_folder != '' ? path_folder+ '/' : '') + current_file.name;
-                $('.move').removeClass('move').addClass('active paste').find('button').html('<i class="fa fa-paste"> Paste');
-            }
-        };
-        var paste = {
-            name: "Paste",
-            icon: 'fa-clipboard',
-            disabled: (cutted_file != null ? false : true),
-            callback: function(key, options) {
-                moveFile(cutted_file, path_folder);
-                $('.paste').removeClass('paste active').addClass('move').find('button').html('<i class="fa fa-arrows"> Move');
-            }
-        };
+        if(cutted_file != null){
+            var paste = {
+                name: "Paste",
+                icon: 'fa-clipboard',
+                disabled: (cutted_file != null ? false : true),
+                callback: function(key, options) {
+                    moveFile(cutted_file, path_folder);
+                    $('.paste').removeClass('paste active').addClass('move').find('button').html('<i class="fa fa-arrows"> Move');
+                }
+            };
+            $elements.push(paste);
+        }
+
         var del = {
             name: "Delete",
             icon: 'fa-trash',
+            disabled: (current_file != null ? false : true),
             callback: function(key, options) {
 
                 if($(this).data('type')){
@@ -397,10 +444,9 @@ $(document).ready(function(){
 
 
 
-
+        $elements.push(rename);
         $elements.push(download);
-        $elements.push(cut);
-        $elements.push(paste);
+
         $elements.push(del);
 
         return $elements;
@@ -423,6 +469,8 @@ $(document).ready(function(){
                 $('#modal-preview').empty();
                 if(current_file.type == 'image'){
                     $('#modal-preview').append('<img src="'+ current_file.preview +'" class="img-responsive" id="modal-image">');
+                    $('#modal-height').text(current_file.height+"px").parent().removeClass('hide');
+                    $('#modal-width').text(current_file.width+"px").parent().removeClass('hide');
                 }
                 if(current_file.type == 'audio'){
                     var html = '<div class="plyr">' +
@@ -518,8 +566,20 @@ $(document).ready(function(){
         if(player != undefined || player != null){
             player.destroy();
         }
+        $("#modal-width").parent().addClass('hide');
+        $("#modal-height").parent().addClass('hide');
+
         //current_file = null;
     });
+
+    /**
+     * Close event for rename modal
+     */
+    $('#modalRename').on('hidden.bs.modal', function (e) {
+        $('#modalRename').find(".file-info").addClass("hide");
+        $('#modalRename').find(".folder-info").addClass("hide");
+    });
+
 
 
 
@@ -601,7 +661,6 @@ $(document).ready(function(){
             var windowParent = window.parent;
             if(typeCallback == 'featured'){
                 var appendId = location.search.split('appendId=')[1] ? location.search.split('appendId=')[1] : null;
-                console.log(location.search.split('appendId='));
                 var image = {
                     "path": $(this).data('path'),
                     "thumb": $(this).data('asset'),
@@ -616,7 +675,6 @@ $(document).ready(function(){
                     name : $(this).find('.name-file').text(),
                     path : $(this).data('asset'),
                 };
-                console.log(fileRequested);
                 editor.redactor('imagemanager.set', fileRequested);
             }
             return false;
@@ -650,13 +708,87 @@ $(document).ready(function(){
     });
 
     /**
+     * Function to call Rename function
+     */
+     var callRenameFunction = function(){
+        var type = $("#type-rename").val();
+        if(type == "file"){
+            var new_name = $("#new-name").val();
+            var ext = $("#new-ext").html();
+            var name = new_name + ext;
+            var path = current_file.path;
+        } else {
+            var name = $("#new-name").val();
+            var path = temp_folder;
+        }
+        renameFileorFolder(path, name, type);
+    }
+
+
+    /**
      * Rename file event button
      */
     $(document).on('click', '#rename-file', function(e){
-        var new_name = $("#new-name").val();
-        renameFile(new_name);
+        callRenameFunction();
     });
 
+    $(document).on('keypress', '#new-name', function(e){
+        if(e.keyCode==13){
+            callRenameFunction();
+        }
+    });
+
+    /**
+     * Perform search based on text given for current view
+     * @param text
+     */
+    var performSearch = function(text){
+        $('#files_container').find('.filemanager-item').each(function(){
+
+
+            if($(this).hasClass('file')){
+
+                if($(this).find('.name-file').text().toUpperCase().indexOf(text.toUpperCase()) != -1){
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            }
+        });
+    };
+
+    /**
+     * Search event
+     */
+    $(document).on('keypress', '#search', function(e){
+        if(e.keyCode==13){
+            if($(this).val()){
+                performSearch($(this).val());
+                $("#search-button").addClass('hide');
+                $("#reset-button").removeClass('hide');
+            } else {
+                $('.filemanager-item').show();
+                $("#search-button").removeClass('hide');
+                $("#reset-button").addClass('hide');
+            }
+        }
+    });
+
+    $(document).on('click', '#search-button', function(e){
+        if($("#search").val()){
+            performSearch($("#search").val());
+            $("#search-button").addClass('hide');
+            $("#reset-button").removeClass('hide');
+        }
+    });
+
+    $(document).on('click', '#reset-button', function(e){
+        $("#search").val('');
+        $('.filemanager-item').show();
+        $("#search-button").removeClass('hide');
+        $("#reset-button").addClass('hide');
+
+    });
 
 
 

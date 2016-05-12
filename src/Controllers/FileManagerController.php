@@ -41,7 +41,7 @@ class FileManagerController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getIndex(CookieJar $cookieJar, Request $request){
-//        $files = $this->getFiles($this->homePath."/media", 'mime', 'all');
+//        $files = $this->getFiles($this->homePath, 'mime', 'all');
 //        dump($files);
 //        dd();
 
@@ -211,12 +211,22 @@ class FileManagerController extends BaseController {
 
 
     public function rename(Request $request){
-        if($request->has('file') && $request->has('newName')){
-            $fileName = explode('/', $request->get('file'));
-            $fileName = end($fileName);
-            $path = str_replace($fileName, '', $request->get('file'));
-            $data = FileFunctionsFacade::rename($request->get('file'), $path, $request->get('newName'), 'rename');
-            return $data;
+
+        if($request->has('type')){
+            if($request->get('type') == "file"){
+                $fileName = explode('/', $request->get('file'));
+                $fileName = end($fileName);
+                $path = str_replace($fileName, '', $request->get('file'));
+                $data = FileFunctionsFacade::rename($request->get('file'), $path, $request->get('newName'), 'rename');
+                return $data;
+            } else {
+                $oldPath = $this->homePath.DIRECTORY_SEPARATOR.$request->get('file');
+                $structure = explode("/", $request->get('file'));
+                array_pop($structure);
+                $newPath = $this->homePath.DIRECTORY_SEPARATOR.implode("/", $structure).DIRECTORY_SEPARATOR;
+                $data = FileFunctionsFacade::rename($oldPath, $newPath, $request->get('newName'), 'rename', 'folder');
+                return $data;
+            }
         } else {
             return ['error' => "Parameters needed"];
         }
@@ -265,6 +275,11 @@ class FileManagerController extends BaseController {
                         'asset' =>  url($this->publicPath.'/'.$file->getBasename()),
                         'can'   =>  true
                     ];
+
+                    if($fileInfo['mime'] == 'image'){
+                        list($width, $height) = getimagesize($fileInfo["path"]);
+                        $fileInfo["dimensions"] = $width ."x".$height;
+                    }
 
                     if($file->getType() == 'dir'){
 

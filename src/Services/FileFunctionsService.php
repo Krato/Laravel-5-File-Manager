@@ -60,26 +60,34 @@ class FileFunctionsService
         }
     }
 
+
     /**
-     * Moving a file to new path
+     * Move or rename a file or folder
+     *
      * @param $oldFile
      * @param $newPath
+     * @param $name
+     * @param $type
+     * @param string $fileOrFolder
      * @return array
      */
-    public function rename($oldFile, $newPath, $name, $type){
+    public function rename($oldFile, $newPath, $name, $type, $fileOrFolder = 'file'){
 
         $permissions = $this->checkPerms($newPath);
         if($permissions == 400 || $permissions == 700){
             return ['error' => "You don't have permissions to move to this folder"];
         }
 
+
+        $name = $this->checkValidNameOption($name, $fileOrFolder);
+
         $name = (!$this->checkFileExists($newPath,$name)) ? $name : $this->checkFileExists($newPath,$name);
 
         if(rename($oldFile, $newPath.$name)){
             if($type = 'rename'){
-                return ['success' => 'File '.$name.' renamed successfully'];
+                return ['success' => ucfirst($fileOrFolder).' '.$name.' renamed successfully'];
             } else {
-                return ['success' => 'File '.$name.' moved successfully'];
+                return ['success' => ucfirst($fileOrFolder).' '.$name.' moved successfully'];
             }
 
         } else {
@@ -167,6 +175,21 @@ class FileFunctionsService
 
     }
 
+    private function checkValidNameOption($name, $folder){
+        if(config('filemanager.validName') == true){
+            if($folder == 'file'){
+                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                $name = pathinfo($name, PATHINFO_FILENAME);
+                return $this->sanitize($name).".".$ext;
+            } else {
+                return $this->sanitize($name);
+            }
+        } else {
+            return $name;
+        }
+
+    }
+
 
     /**
      * Check if folder exists
@@ -219,7 +242,7 @@ class FileFunctionsService
      * @param bool $anal
      * @return bool|mixed|string
      */
-    private function sanitize($string, $force_lowercase = false, $anal = true)
+    private function sanitize($string, $force_lowercase = true, $anal = true)
     {
         $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
             "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",

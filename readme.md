@@ -14,7 +14,15 @@ composer require infinety/filemanager
 ```
 
 Add the provider on ‘app.php’:
-`Infinety\FileManager\FileManagerServiceProvider::class`
+```php
+Infinety\FileManager\FileManagerServiceProvider::class,
+Chumper\Zipper\ZipperServiceProvider:class
+```
+
+And aliase to Zipper (It's required to download folders in zip format): 
+```php
+'Zipper' => Chumper\Zipper\Zipper::class
+```
 
 Publish config and public files:
 `php artisan vendor:publish --provider="Infinety\FileManager\FileManagerServiceProvider"
