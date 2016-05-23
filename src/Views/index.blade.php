@@ -10,99 +10,7 @@
 
 @section('content')
 
-    <!-- Modal Create Folder -->
-    <div class="modal fade fill-in" id="modalCreateFolder" tabindex="-1" role="dialog" aria-labelledby="modalFillInLabel" aria-hidden="true">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            <i class="pg-close"></i>
-        </button>
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="text-left p-b-5"><span class="semi-bold">New folder</span> name</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <input type="text" placeholder="Name of the new folder" class="form-control input-lg" id="folder-name" name="folder-name">
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <button type="button" id="create-folder" class="btn btn-primary btn-lg btn-large fs-15">Create Folder</button>
-                        </div>
-                    </div>
-                    <p class="text-right hinted-text p-t-10 p-r-10">New folder will be created on current folder</p>
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- End Modal Create Folder -->
-
-    <!-- Modal Create Folder -->
-    <div class="modal fade fill-in" id="modalRename" tabindex="-1" role="dialog" aria-labelledby="modalFillInLabel" aria-hidden="true">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            <i class="pg-close"></i>
-        </button>
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="text-left p-b-5"><span class="semi-bold">Rename</span> this file</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <input type="text" placeholder="Your new name" class="form-control input-lg" id="new-name" name="new-name">
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <button type="button" id="rename-file" class="btn btn-primary btn-lg btn-large fs-15">Rename</button>
-                        </div>
-                    </div>
-                    <p class="text-right hinted-text p-t-10 p-r-10">If new name exists, some data will be added to your new name</p>
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- End Modal Create Folder -->
-
-    <!-- Modal Preview -->
-    <div class="modal fade slide-up disable-scroll" id="previewInfo" tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content-wrapper">
-                <div class="modal-content">
-                    <div class="modal-header clearfix text-left">
-
-                    </div>
-                    <div class="modal-body">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                            <i class="pg-close fs-14"></i>
-                        </button>
-                        <div class="row">
-                            <div class="col-md-8" id="modal-preview">
-
-                            </div>
-                            <div class="col-md-4 b-l b-grey" id="modal-info">
-                                <ul class="no-style">
-                                    <li><b>Name</b>: <span id="modal-name"></span></li>
-                                    <li><b>Size</b>: <span id="modal-size"></span></li>
-                                </ul>
-                                <button class="btn btn-complete m-t-30 hide">Download file</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-    <!-- End Modal Preview -->
+    @include('filemanager::modals')
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -128,23 +36,25 @@
                         <li class="move"><button class="btn"><i class="fa fa-arrows"></i> Move</button></li>
                         <li class="delete"><button class="btn"><i class="fa fa-trash"></i> Delete</button></li>
                         <li class="preview"><button class="btn"><i class="fa fa-eye"></i> Preview</button></li>
+                        <li class="find">
+                            <div class="navbar-form navbar-left navbar-input-group">
+                                <div class="input-group form-search">
+                                    <input type="text" class="form-control search-input" id="search" placeholder="&#61442; Search">
+                                    <span class="input-group-addon input-group-search">
+                                        <button class="btn btn-complete" id="search-button" type="button"><i class="fa fa-search" aria-hidden="false"></i></button>
+                                        <button class="btn btn-complete hide" id="reset-button" type="button"><i class="fa fa-times" aria-hidden="false"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <form class="navbar-form navbar-right hide" role="search">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search">
-                            </div>
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
+
                         <ul class="nav navbar-nav navbar-right views">
                             <li class="list view-type"><button class="btn "><i class="fa fa-th-list"></i></button></li>
                             <li class="grid view-type active"><button class="btn "><i class="fa fa-th"></i></button></li>
                             <li class="big-grid view-type"><button class="btn "><i class="fa fa-th-large"></i></button></li>
-                        </ul>
-
-                        <ul class="nav navbar-nav navbar-right">
-
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->

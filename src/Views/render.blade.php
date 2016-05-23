@@ -29,7 +29,7 @@
                 </div>
             @else
                 @if($file->can)
-                    <div class="filemanager-item file"  data-type="{{ $file->mime }}" data-path="{{ $file->path }}" data-asset="{{ $file->asset }}" data-size="{{ $file->size_human }}">
+                    <div class="filemanager-item file"  data-type="{{ $file->mime }}" data-path="{{ $file->path }}" data-asset="{{ $file->asset }}" data-size="{{ $file->size_human }}" {{ ($file->mime == 'image') ? 'data-dimension='.$file->dimensions : '' }} >
                         <div class="row full-width centered">
                             <div class="col-sm-4 b-r b-grey icon">
                                 <img src="{{ $file->thumb }}">

@@ -25,67 +25,7 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/css/filemanager.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.contextMenu.css') }}">
 
-            <!-- Modal Create Folder -->
-    <div class="modal fade fill-in" id="modalCreateFolder" tabindex="-1" role="dialog" aria-labelledby="modalFillInLabel" aria-hidden="true">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            <i class="pg-close"></i>
-        </button>
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="text-left p-b-5"><span class="semi-bold">New folder</span> name</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <input type="text" placeholder="Name of the new folder" class="form-control input-lg" id="folder-name" name="folder-name">
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <button type="button" id="create-folder" class="btn btn-primary btn-lg btn-large fs-15">Create Folder</button>
-                        </div>
-                    </div>
-                    <p class="text-right hinted-text p-t-10 p-r-10">New folder will be created on current folder</p>
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
-    <!-- Modal Preview -->
-    <div class="modal fade slide-up disable-scroll" id="previewInfo" tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content-wrapper">
-                <div class="modal-content">
-                    <div class="modal-header clearfix text-left">
-
-                    </div>
-                    <div class="modal-body">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                            <i class="pg-close fs-14"></i>
-                        </button>
-                        <div class="row">
-                            <div class="col-md-8" id="modal-preview">
-
-                            </div>
-                            <div class="col-md-4 b-l b-grey" id="modal-info">
-                                <ul class="no-style">
-                                    <li><b>Name</b>: <span id="modal-name"></span></li>
-                                    <li><b>Size</b>: <span id="modal-size"></span></li>
-                                </ul>
-                                <button class="btn btn-complete m-t-30 hide">Download file</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-    <!-- /.modal-dialog -->
+    @include('filemanager::modals')
     <div class="panel panel-default">
         <div class="panel-heading">
             <nav class="navbar navbar-default">
@@ -100,7 +40,10 @@
                         </button>
                     </div>
                     <ul class="nav navbar-nav">
-                        <li><button class="btn btn-complete btn-cons" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-upload"></i> Upload</button></li>
+                        <div class="upload_div hide">
+                            <input type="file" name="files[]" id="single-upload-file" multiple="multiple" title="Click to add Files">
+                        </div>
+                        <li><button class="btn btn-complete btn-cons" id="single-upload"<i class="fa fa-upload"></i> Upload</button></li>
                         <li><button class="btn btn-complete btn-cons" data-toggle="modal" data-target="#modalCreateFolder"><i class="fa fa-folder"></i> Create Folder</button></li>
                         <li class="home"><button class="btn "><i class="fa fa-home"></i></button></li>
                         <li class="refresh"><button class="btn "><i class="fa fa-refresh"></i></button></li>
@@ -157,8 +100,10 @@
                 {{--</select>--}}
             {{--</div>--}}
             {{--<li class="list-group-item filter hide active" data-filter="image"><i class="fa fa-image"></i>Images</li>--}}
-            <div class="col-xs-12 col-sm-12">
-                <div class="row" id="files_container">
+            <div class="col-xs-12">
+                <div class="col-xs-12">
+                    <div class="row upload_div" id="files_container">
+                    </div>
                 </div>
             </div>
 
@@ -214,10 +159,16 @@
             url_upload  = "{{ url('admin/filemanager/uploadFile') }}";
             url_cfolder = "{{ url('admin/filemanager/createFolder') }}";
             url_delete  = "{{ url('admin/filemanager/delete') }}";
+            url_download = "{{ url('admin/filemanager/download') }}";
+            url_preview  = "{{ url('admin/filemanager/preview') }}";
+            url_move  = "{{ url('admin/filemanager/move') }}";
+            url_rename  = "{{ url('admin/filemanager/rename') }}";
             image_path  = "{{ asset('/') }}";
             homeFolder  = "{{ last($home) }}";
             path_folder = "";
             current_file = null;
+            cutted_file = null;
+            temp_folder = null;
             globalFilter = "{{ (isset($_GET['filter'])) ? $_GET['filter'] : 'image' }}";
             typeCallback = "{{ (isset($_GET['type'])) ? $_GET['type'] : 'featured' }}";
             editorId =  "{{ (isset($_GET['editor'])) ? $_GET['editor'] : null }}";

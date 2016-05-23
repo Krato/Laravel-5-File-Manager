@@ -253,9 +253,11 @@ $(document).ready(function(){
                         };
 
                         if(current_file.type == 'image'){
-                            var dimensions = $($trigger).data('dimension').split("x");
-                            current_file.height = dimensions[0];
-                            current_file.width = dimensions[1];
+                            if($($trigger).data('dimension')){
+                                var dimensions = $($trigger).data('dimension').split("x");
+                                current_file.height = dimensions[0];
+                                current_file.width = dimensions[1];
+                            }
                         }
 
                     } else {
@@ -307,12 +309,12 @@ $(document).ready(function(){
         // Only for supported mimes
         if(current_file != undefined && current_file.preview != false){
             var preview = {
-                    name: "Preview",
-                    icon: 'fa-eye',
-                    callback: function(key, options) {
-                        $('.preview').trigger('click');
-                    }
-                };
+                name: "Preview",
+                icon: 'fa-eye',
+                callback: function(key, options) {
+                    $('.preview').trigger('click');
+                }
+            };
             $elements.push(preview);
         }
 
@@ -329,6 +331,7 @@ $(document).ready(function(){
                         $("#new-ext").html(ext).removeClass("hide");
                         $("#data-rename").removeClass('input').addClass('input-group');
                         $('#modalRename').find(".file-info").removeClass("hide");
+                        $('#modalRename').find("#path").val(current_file.path);
                         $('#modalRename').find("#type-rename").val("file");
                         $('#modalRename').modal('show');
                     }
@@ -474,37 +477,37 @@ $(document).ready(function(){
                 }
                 if(current_file.type == 'audio'){
                     var html = '<div class="plyr">' +
-                                    '<audio controls crossorigin>' +
-                                        '<source src="'+ current_file.relativePath +'" type="audio/mpeg">' +
-                                        'Your browser does not support the audio element.' +
-                                    '</audio>' +
-                                '</div>';
+                        '<audio controls crossorigin>' +
+                        '<source src="'+ current_file.relativePath +'" type="audio/mpeg">' +
+                        'Your browser does not support the audio element.' +
+                        '</audio>' +
+                        '</div>';
                     $('#modal-preview').append(html);
                     plyr.setup('.plyr');
                 }
                 if(current_file.type == 'video'){
                     var html = '<div class="plyr">' +
-                                    '<video  controls crossorigin>' +
-                                        '<source src="'+ current_file.relativePath +'" type="video/mp4">' +
-                                        '<a href="'+ current_file.preview +'">Download</a>' +
-                                    '</video>' +
-                                '</div>';
+                        '<video  controls crossorigin>' +
+                        '<source src="'+ current_file.relativePath +'" type="video/mp4">' +
+                        '<a href="'+ current_file.preview +'">Download</a>' +
+                        '</video>' +
+                        '</div>';
                     $('#modal-preview').append(html);
                     plyr.setup('.plyr');
                 }
                 if(current_file.type == 'pdf'){
-                   new PDFObject({ url: current_file.path, height: '500px' }).embed("modal-preview");
+                    new PDFObject({ url: current_file.path, height: '500px' }).embed("modal-preview");
                 }
                 if(current_file.type == 'text'){
 
                     readStringFromFileAtPath(current_file);
                     var html = '<div class="code-editor"> <span class="control"></span> <span class="control"></span><span class="control"></span>' +
-                                    '<pre>' +
-                                        '<code class="language-markup">' +
-                                            'Loading...' +
-                                        '</code>' +
-                                    '</pre>' +
-                                '</div>';
+                        '<pre>' +
+                        '<code class="language-markup">' +
+                        'Loading...' +
+                        '</code>' +
+                        '</pre>' +
+                        '</div>';
                     $('#modal-preview').append(html);
                 }
 
@@ -534,12 +537,12 @@ $(document).ready(function(){
             } else {
                 var demo = hljs.highlightAuto(data);
                 var html = '<div class="code-editor"> <span class="control"></span> <span class="control"></span><span class="control"></span>' +
-                                '<pre>' +
-                                    '<code id="code-ajax-content"">' +
-                                        demo.value +
-                                    '</code>' +
-                                '</pre>' +
-                            '</div>';
+                    '<pre>' +
+                    '<code id="code-ajax-content"">' +
+                    demo.value +
+                    '</code>' +
+                    '</pre>' +
+                    '</div>';
                 $('#modal-preview').empty().html(html);
 
                 //hljs.highlightBlock($('#code-ajax-content')[0]);
@@ -710,13 +713,13 @@ $(document).ready(function(){
     /**
      * Function to call Rename function
      */
-     var callRenameFunction = function(){
+    var callRenameFunction = function(){
         var type = $("#type-rename").val();
         if(type == "file"){
             var new_name = $("#new-name").val();
             var ext = $("#new-ext").html();
             var name = new_name + ext;
-            var path = current_file.path;
+            var path = $('#modalRename').find("#path").val();
         } else {
             var name = $("#new-name").val();
             var path = temp_folder;
