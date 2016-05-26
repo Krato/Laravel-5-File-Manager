@@ -58,10 +58,12 @@ class FileManagerServiceProvider extends ServiceProvider
             return new FileManagerHelper;
         });
 
-
-        $this->app->bind('filemanager',function($app){
-            return new MenuManager($app);
-        });
+        //Load Services Providers
+        $this->app->register('Chumper\Zipper\ZipperServiceProvider');
+        
+        // Register dependancy aliases
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Zipper', 'Chumper\Zipper\Zipper');
 
         $this->app->singleton('filemanager', 'Infinety\FileManager\Helpers\FileManagerHelper');
 
