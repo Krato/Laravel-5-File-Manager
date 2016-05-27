@@ -168,14 +168,40 @@ class FileFunctionsService
         }
 
         if($file->move($path, $name)){
+
+            //Try to compress
+            if(config('filemanager.pngquantPath') != null){
+                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                //Compress PNG files
+                if($ext == 'png'){
+                    $compressed_png_content = $this->compress_png($path.$name);
+                    if($compressed_png_content != false){
+                        file_put_contents($path.$name, $compressed_png_content);
+                    }
+                }
+
+                //Compress JPG files
+                if($ext == 'jpg' || $ext == 'jpeg'){
+                    $compressed_jpg_content = $this->compress_jpg($path.$name);
+
+                    if($compressed_jpg_content != false){
+                        file_put_contents($path.$name, $compressed_jpg_content);
+                    }
+                }
+            }
+            
+            
+
+
             return ['success' => $name];
         } else {
-            return ['error' => 'Impossible ti upload this file to this folder'];
+            return ['error' => 'Impossible upload this file to this folder'];
         }
 
     }
 
-    private function checkValidNameOption($name, $folder){
+    private function checkValidNameOption($name, $folder)
+    {
         if(config('filemanager.validName') == true){
             if($folder == 'file'){
                 $ext = pathinfo($name, PATHINFO_EXTENSION);
@@ -197,7 +223,8 @@ class FileFunctionsService
      * @param $folder
      * @return bool
      */
-    private function checkFolderExists($folder){
+    private function checkFolderExists($folder)
+    {
         if(file_exists($folder)){
             return true;
         } else {
@@ -210,7 +237,8 @@ class FileFunctionsService
      * @param $path
      * @return string
      */
-    private function checkPerms($path){
+    private function checkPerms($path)
+    {
         clearstatcache(null, $path);
         return decoct( fileperms($path) & 0777 );
     }
@@ -222,7 +250,8 @@ class FileFunctionsService
      * @param $name
      * @return bool|string
      */
-    private function checkFileExists($folder, $name){
+    private function checkFileExists($folder, $name)
+    {
 
         if(file_exists($folder.$name)){
             $withoutExt = pathinfo($name, PATHINFO_FILENAME);
@@ -256,6 +285,69 @@ class FileFunctionsService
                 mb_strtolower($clean, 'UTF-8') :
                 strtolower($clean) :
             $clean;
+    }
+
+    /*********************************
+     * Images Optimization Functions *
+     *********************************/
+
+    /**
+     * Optimizes PNG file with pngquant 1.8 or later (reduces file size of 24-bit/32-bit PNG images).
+     *
+     * You need to install pngquant 1.8 on the server (ancient version 1.0 won't work).
+     * There's package for Debian/Ubuntu and RPM for other distributions on http://pngquant.org
+     *
+     * @param $path_to_png_file string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
+     * @param $max_quality int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
+     * @return string - content of PNG file after conversion
+     */
+    function compress_png($path_to_png_file, $max_quality = 90)
+    {
+        if (!file_exists($path_to_png_file)) {
+            return false;
+        }
+
+        // guarantee that quality won't be worse than that.
+        $min_quality = 60;
+
+        // '-' makes it use stdout, required to save to $compressed_png_content variable
+        // '<' makes it read from the given file path
+        // escapeshellarg() makes this safe to use with any path
+        $compressed_png_content = shell_exec( config('filemanager.pngquantPath'). " --quality=$min_quality-$max_quality - < ".escapeshellarg( $path_to_png_file ) );
+
+        if (!$compressed_png_content) {
+            return false;
+        }
+
+        return $compressed_png_content;
+    }
+
+    /**
+     * Optimizes JPG file with jpg-recompress
+     * 
+     * @param  [type]  $path_to_jpg_file [description]
+     * @param  integer $max_quality      [description]
+     * @return [type]                    [description]
+     */
+    function compress_jpg($path_to_jpg_file, $max_quality = 90)
+    {
+        if (!file_exists($path_to_jpg_file)) {
+            return false;
+        }
+
+        // guarantee that quality won't be worse than that.
+        $min_quality = 60;
+
+        // '- -' makes it use stdout, required to save to $compressed_jpg_content variable
+        // '<' makes it read from the given file path
+        // escapeshellarg() makes this safe to use with any path
+        $compressed_jpg_content = shell_exec( config('filemanager.jpegRecompressPath'). " --quality high --min $min_quality --max $max_quality --quiet - - < ".escapeshellarg( $path_to_jpg_file ) );
+
+        if (!$compressed_jpg_content) {
+            return false;
+        }
+
+        return $compressed_jpg_content;
     }
 
 }

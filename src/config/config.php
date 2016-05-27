@@ -71,6 +71,26 @@ return array(
     */
     'appendUrl'  => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Path for pngquant. This is used to auto optimize png files. If set to null, FileManager will not optimize png files.
+    | You must install pngquant in your host. https://pngquant.org
+    | Null by default
+    |--------------------------------------------------------------------------
+    |
+    */
+    'pngquantPath'  => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Path for pngquant. This is used to auto optimize jpg files. If set to null, FileManager will not optimize jpg files.
+    | You must install JPEG Archive in your host. https://github.com/danielgtaylor/jpeg-archive
+    | Null by default
+    |--------------------------------------------------------------------------
+    |
+    */
+    'jpegRecompressPath'  => null,
+
 
 );
 
