@@ -29,6 +29,7 @@ class FileManagerServiceProvider extends ServiceProvider
         // $this->publishes([
         //     realpath(__DIR__.'/resources/lang') => $this->app->basePath().'/resources/lang'
         // ], 'lang');
+        // 
 
         /**
          * Publish Public Assets
@@ -36,6 +37,15 @@ class FileManagerServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/public' => public_path('filemanager_assets'),
         ], 'public');
+
+
+        /**
+         * Publish Layout view
+         */
+        $this->publishes([
+            __DIR__.'/Views/layout' => base_path('resources/views/layouts'),
+        ], 'layout');
+
 
         /**
          * Publish default views

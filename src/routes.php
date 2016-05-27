@@ -1,6 +1,7 @@
 <?php
 
-Route::group(['prefix' => 'admin/filemanager', 'middleware' => config('filemanager.middleware')], function() {
+
+Route::group(['prefix' => config('filemanager.defaultRoute', 'admin/filemanager') , 'middleware' => config('filemanager.middleware')], function() {
 
     Route::get('/', 'Infinety\FileManager\Controllers\FileManagerController@getIndex');
 	Route::get('/dialog', 'Infinety\FileManager\Controllers\FileManagerController@getDialog');
