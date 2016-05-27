@@ -13,90 +13,94 @@
  *
 */
 
-.navbar-default {
+
+
+
+.customnav .navbar-default {
     background: none;
     border: none;
+    margin-bottom: 0;
 }
-.navbar-default .navbar-brand {
+.customnav .navbar-default .navbar-brand {
     color: #ffffff !important;
     opacity: 1;
 }
-.navbar-default .navbar-brand:hover,
-.navbar-default .navbar-brand:focus {
+.customnav .navbar-default .navbar-brand:hover,
+.customnav .navbar-default .navbar-brand:focus {
     color: #ffffff !important;
 }
-.navbar-default .navbar-text {
+.customnav .navbar-default .navbar-text {
     color: #ffffff !important;
 }
-.navbar-default .navbar-nav > li > a {
+.customnav .navbar-default .navbar-nav > li > a {
     color: #ffffff !important;
     opacity: 1;
     padding: 10px 15px;
 }
 
-.navbar-default .navbar-nav > li > button {
+.customnav .navbar-default .navbar-nav > li > button {
     padding: 10px 15px;
 }
 
 
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {
+.customnav .navbar-default .navbar-nav > li > a:hover,
+.customnav .navbar-default .navbar-nav > li > a:focus {
     color: #423F3F !important;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu {
+.customnav .navbar-default .navbar-nav > li > .dropdown-menu {
     background-color: #39bee8;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+.customnav .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
     color: #ffffff !important;
     opacity: 1;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+.customnav .navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.customnav .navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
     color: #ffffff !important;
     background-color: #39bee8;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+.customnav .navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
     background-color: #39bee8;
 }
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #ffffff !important;
-    background-color: #39bee8;
-    opacity: 1;
-}
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
+.customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ffffff !important;
     background-color: #39bee8;
     opacity: 1;
 }
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:hover,
-.navbar-default .navbar-nav > .open > a:focus {
+.customnav .navbar-default .navbar-nav > .active > a,
+.customnav .navbar-default .navbar-nav > .active > a:hover,
+.customnav .navbar-default .navbar-nav > .active > a:focus {
     color: #ffffff !important;
     background-color: #39bee8;
     opacity: 1;
 }
-.navbar-default .navbar-toggle {
+.customnav .navbar-default .navbar-nav > .open > a,
+.customnav .navbar-default .navbar-nav > .open > a:hover,
+.customnav .navbar-default .navbar-nav > .open > a:focus {
+    color: #ffffff !important;
+    background-color: #39bee8;
+    opacity: 1;
+}
+.customnav .navbar-default .navbar-toggle {
     border-color: #39bee8;
 }
-.navbar-default .navbar-toggle:hover,
-.navbar-default .navbar-toggle:focus {
+.customnav .navbar-default .navbar-toggle:hover,
+.customnav .navbar-default .navbar-toggle:focus {
     background-color: #39bee8;
 }
-.navbar-default .navbar-toggle .icon-bar {
+.customnav .navbar-default .navbar-toggle .icon-bar {
     background-color: #ffffff;
 }
-.navbar-default .navbar-collapse,
-.navbar-default .navbar-form {
+.customnav .navbar-default .navbar-collapse,
+.customnav .navbar-default .navbar-form {
     border-color: #ffffff;
 }
-.navbar-default .navbar-link {
+.customnav .navbar-default .navbar-link {
     color: #ffffff !important;
 }
-.navbar-default .navbar-link:hover {
+.customnav .navbar-default .navbar-link:hover {
     color: #ffffff !important;
 }
 /* Set view type active */
@@ -166,21 +170,21 @@ input.search-input::-ms-input-placeholder {
 
 @media (max-width: 767px) {
 
-    .navbar-default .navbar-nav > li > a {
+    .customnav .navbar-default .navbar-nav > li > a {
         padding: 25px;
     }
-    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ffffff !important;
         opacity: 1;
     }
-    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
-    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #ffffff !important;
         opacity: 1;
     }
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .customnav .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
         color: #ffffff !important;
         background-color: #39bee8;
         opacity: 1;
@@ -320,6 +324,9 @@ input.search-input::-ms-input-placeholder {
     background: #48B0F7;
     color:#FFF;
 }
+.filemanager-item.active .icon i{
+    color: #F2F2F2;
+}
 
 .error-file{
     background: #FE9E9E;
@@ -376,4 +383,21 @@ input.search-input::-ms-input-placeholder {
 .extension-info{
     background-color: #48b0f7;
     color: white;
+}
+
+/* Dialogs */
+.default-dialog .panel-default {
+    border: none;
+    box-shadow: none;
+}
+
+
+/** Custom styles for default pages */
+
+.default-views .navbar-nav > li {
+    margin:0 2px;
+}
+
+.default-views  .full-width {
+    width: 100%;
 }

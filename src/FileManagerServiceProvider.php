@@ -38,6 +38,13 @@ class FileManagerServiceProvider extends ServiceProvider
         ], 'public');
 
         /**
+         * Publish default views
+         */
+        $this->publishes([
+            __DIR__.'/Views/default_views' => base_path('resources/views/vendor/infinety/filemanager'),
+        ], 'views');
+
+        /**
          * Publish config file
          */
         $this->publishes([

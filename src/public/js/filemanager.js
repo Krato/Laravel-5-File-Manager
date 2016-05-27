@@ -24,6 +24,17 @@ $(document).ready(function(){
         }
     };
 
+    checkFileOrFolder = function(){
+        if(checkFileSelected()){
+            return false;
+        }        
+        if(temp_folder === undefined || temp_folder === null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Get folder and files data
      *
@@ -273,7 +284,7 @@ $(document).ready(function(){
                 } else {
                     temp_folder = $($trigger).data('folder');
                 }
-                $('.file').removeClass('active');
+                $('.file, .folder').removeClass('active');
                 $($trigger).addClass('active');
                 actionFileButtons();
                 return {
@@ -293,6 +304,7 @@ $(document).ready(function(){
                         $('.file').removeClass('active');
                         actionFileButtons();
                     }
+                    $('.file, .folder').removeClass('active');
 
                 }
             }
@@ -321,7 +333,7 @@ $(document).ready(function(){
         var rename = {
             name: "Rename",
             icon: 'fa-keyboard-o',
-            disabled: (current_file != null ? false : true),
+            disabled: checkFileOrFolder(),
             callback: function(key, options) {
                 if($(this).data('type')){
                     if( checkFileSelected() ) {
@@ -352,7 +364,7 @@ $(document).ready(function(){
         var download = {
             name: "Download",
             icon: 'fa-download',
-            disabled: (current_file != null ? false : true),
+            disabled: checkFileOrFolder(),
             callback: function(key, options) {
                 if(path_folder != ""){
                     path_folder += '/';
@@ -410,7 +422,7 @@ $(document).ready(function(){
         var del = {
             name: "Delete",
             icon: 'fa-trash',
-            disabled: (current_file != null ? false : true),
+            disabled: checkFileOrFolder(),
             callback: function(key, options) {
 
                 if($(this).data('type')){

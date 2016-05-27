@@ -155,14 +155,14 @@
              * Set global variables
              */
 
-            url_process = "{{ url('admin/filemanager/get_folder') }}";
-            url_upload  = "{{ url('admin/filemanager/uploadFile') }}";
-            url_cfolder = "{{ url('admin/filemanager/createFolder') }}";
-            url_delete  = "{{ url('admin/filemanager/delete') }}";
-            url_download = "{{ url('admin/filemanager/download') }}";
-            url_preview  = "{{ url('admin/filemanager/preview') }}";
-            url_move  = "{{ url('admin/filemanager/move') }}";
-            url_rename  = "{{ url('admin/filemanager/rename') }}";
+            url_process = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/get_folder') }}";
+            url_upload  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/uploadFile') }}";
+            url_cfolder = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/createFolder') }}";
+            url_delete  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/delete') }}";
+            url_download = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/download') }}";
+            url_preview  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/preview') }}";
+            url_move  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/move') }}";
+            url_rename  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/rename') }}";
             image_path  = "{{ asset('/') }}";
             homeFolder  = "{{ last($home) }}";
             path_folder = "";

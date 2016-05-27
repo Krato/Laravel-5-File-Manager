@@ -45,7 +45,7 @@ class FileManagerController extends BaseController {
 //        dump($files);
 //        dd();
 
-        return $this->firstViewThatExists('admin/filemanager/index', 'filemanager::index');
+        return $this->firstViewThatExists('vendor/infinety/filemanager/index', 'filemanager::index');
     }
 
     /**
@@ -53,7 +53,7 @@ class FileManagerController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getDialog(){
-        return $this->firstViewThatExists('admin/filemanager/dialog', 'filemanager::dialog');
+        return $this->firstViewThatExists('vendor/infinety/filemanager/dialog', 'filemanager::dialog');
     }
 
     /**
@@ -86,7 +86,7 @@ class FileManagerController extends BaseController {
             }
             $files = $this->getFiles($folder, $order, $filter);
 
-            return Response::json($this->firstViewThatExists('admin/filemanager/render', 'filemanager::render', compact('files'))->render());
+            return Response::json($this->firstViewThatExists('vendor/infinety/filemanager/render', 'filemanager::render', compact('files'))->render());
 
 //            return json_encode($files);
         }

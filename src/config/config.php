@@ -11,6 +11,14 @@ return array(
     */
     'homePath'  => public_path(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default routes for your file manager. You can modify here:
+    |--------------------------------------------------------------------------
+    |
+    */
+    'defaultRoute'  => 'admin/filemanager',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -18,7 +26,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'middleware'  => 'web',
+    'middleware'  => ['web', 'auth'],
 
 
     /*
@@ -44,7 +52,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'exceptFolders' => array( 'vendor', 'thumbs'),
+    'exceptFolders' => array( 'vendor', 'thumbs', 'filemanager_assets'),
 
 
     /*
