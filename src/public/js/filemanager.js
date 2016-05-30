@@ -585,7 +585,7 @@ $(document).ready(function(){
                     plyr.setup('.plyr');
                 }
                 if(current_file.type == 'pdf'){
-                    new PDFObject({ url: current_file.path, height: '500px' }).embed("modal-preview");
+                    new PDFObject({ url: current_file.relativePath, height: '500px' }).embed("modal-preview");
                 }
                 if(current_file.type == 'text'){
 

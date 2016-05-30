@@ -73,7 +73,8 @@ $(document).ready(function(){
                 //console.log(percentStr);
                 $.gallery.updateFileProgress(id, percentStr);
                 if(percent == 100){
-                    if(optimizeOption == true){
+                    var fileType = $("#file-"+id).data('file');
+                    if(optimizeOption == true && fileType.indexOf("image") !=-1 ){
                         $("#file-"+id).find('.info').find('.small').text('Optimizing...')
                     }
                     
