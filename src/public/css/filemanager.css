@@ -13,9 +13,11 @@
  *
 */
 
+/* PNotify buttons */
+.ui-pnotify-closer,.ui-pnotify-sticker{float:right;margin-left:.2em}
+/* End PNotify buttons */
 
-
-
+/* Custom Nav */
 .customnav .navbar-default {
     background: none;
     border: none;
@@ -126,6 +128,7 @@ li.active .btn{
     border-bottom-left-radius: 0px;
     border-left: 0px;
 }
+/* End Custom Nav */
 
 
 

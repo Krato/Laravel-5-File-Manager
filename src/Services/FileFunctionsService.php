@@ -124,6 +124,51 @@ class FileFunctionsService
         }
     }
 
+    /**
+     * Optimize an image. Only supports JPG and PNG files
+     * 
+     * @param  string $file
+     * @param  string $type
+     * @return array
+     */
+    public function optimize($file, $type)
+    {
+
+        //Try to compress 
+        if(config('filemanager.optimizeImages') == true){
+
+            if(config('filemanager.pngquantPath') != null){
+                //Compress PNG files
+                if($type == 'png'){
+                    $compressed_png_content = $this->compress_png($file);
+                    if($compressed_png_content != false){
+                        file_put_contents($file, $compressed_png_content);
+                        return ['success' => 'File optimized successfully'];
+                    } else {
+                        return ['error' => 'Error optimizing file'];
+                    }
+                }
+            }
+
+            if(config('filemanager.jpegRecompressPath') != null){
+                //Compress JPG files
+                if($type == 'jpg' || $type == 'jpeg'){
+                    $compressed_jpg_content = $this->compress_jpg($file);
+                    if($compressed_jpg_content != false){
+                        file_put_contents($file, $compressed_jpg_content);
+                        return ['success' => 'File optimized successfully'];
+                    } else {
+                        return ['error' => 'Error optimizing file'];
+                    }
+                }
+            }
+        } else {
+            return ['error' => 'Optimize option is set to false'];
+        }
+        return ['error' => 'Image type is not supported to optimize'];
+      
+    }
+
 
     /**
      * Removes a folder recursively
@@ -169,29 +214,31 @@ class FileFunctionsService
 
         if($file->move($path, $name)){
 
-            //Try to compress
-            if(config('filemanager.pngquantPath') != null){
+            //Try to compress 
+            if(config('filemanager.optimizeImages') == true){
                 $ext = pathinfo($name, PATHINFO_EXTENSION);
-                //Compress PNG files
-                if($ext == 'png'){
-                    $compressed_png_content = $this->compress_png($path.$name);
-                    if($compressed_png_content != false){
-                        file_put_contents($path.$name, $compressed_png_content);
+
+                if(config('filemanager.pngquantPath') != null){
+                    //Compress PNG files
+                    if($ext == 'png'){
+                        $compressed_png_content = $this->compress_png($path.$name);
+                        if($compressed_png_content != false){
+                            file_put_contents($path.$name, $compressed_png_content);
+                        }
                     }
                 }
 
-                //Compress JPG files
-                if($ext == 'jpg' || $ext == 'jpeg'){
-                    $compressed_jpg_content = $this->compress_jpg($path.$name);
+                if(config('filemanager.jpegRecompressPath') != null){
+                    //Compress JPG files
+                    if($ext == 'jpg' || $ext == 'jpeg'){
+                        $compressed_jpg_content = $this->compress_jpg($path.$name);
 
-                    if($compressed_jpg_content != false){
-                        file_put_contents($path.$name, $compressed_jpg_content);
+                        if($compressed_jpg_content != false){
+                            file_put_contents($path.$name, $compressed_jpg_content);
+                        }
                     }
                 }
             }
-            
-            
-
 
             return ['success' => $name];
         } else {
@@ -200,6 +247,14 @@ class FileFunctionsService
 
     }
 
+
+    /**
+     * Check if validName option is true and then sanitize new string
+     * 
+     * @param  string $name
+     * @param  string $folder
+     * @return string
+     */
     private function checkValidNameOption($name, $folder)
     {
         if(config('filemanager.validName') == true){

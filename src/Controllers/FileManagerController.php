@@ -122,6 +122,16 @@ class FileManagerController extends BaseController {
     }
 
     /**
+     * Compress image. Only handles JPG or PNG files
+     * @param Request $request
+     * @return mixed
+     */
+    public function optimize(Request $request){
+        $data = FileFunctionsFacade::optimize($request["file"], $request["type"]);
+        return $data;
+    }
+
+    /**
      * Download a file or Folder in zip
      * @param Request $request
      * @return bool

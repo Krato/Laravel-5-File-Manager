@@ -5,10 +5,9 @@ $(document).ready(function(){
 
 
 
-    $('#uploadModal').on('show.bs.modal', function (e) {
-        console.log('daa');
-        uploadMethod();
-    });
+    // $('#uploadModal').on('show.bs.modal', function (e) {
+    //     uploadMethod();
+    // });
 
 
      uploadMethod = function(){
@@ -17,7 +16,7 @@ $(document).ready(function(){
         $('.upload_div').dmUploader({
             url: url_upload,
             dataType: 'json',
-            allowedTypes: ['image/*|application/*|text/*'],
+            allowedTypes: ['image/*|application/*|text/*|video/*|audio/*'],
             extraData: function(){
                 return {'folder' : path_folder }
             },
@@ -67,11 +66,18 @@ $(document).ready(function(){
                 //var filter = $('.filter').data('filter');
                 //var sort = $("#sort-by").val();
                 //getData(path_folder, sort, filter);
+                
             },
             onUploadProgress: function (id, percent) {
                 var percentStr = percent + '%';
                 //console.log(percentStr);
                 $.gallery.updateFileProgress(id, percentStr);
+                if(percent == 100){
+                    if(optimizeOption == true){
+                        $("#file-"+id).find('.info').find('.small').text('Optimizing...')
+                    }
+                    
+                }
             },
             onUploadSuccess: function (id, data) {
                 //Referesh this folder
@@ -81,7 +87,6 @@ $(document).ready(function(){
                         text: data.error,
                         type: 'error'
                     });
-                    console.log(id);
                     $("#file-"+id).remove();
                 }
                 //Refresh this folder

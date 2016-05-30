@@ -2,7 +2,10 @@
 
 Custom file manager for Laravel 5
 
+![screenshot-1](https://cloud.githubusercontent.com/assets/74367/15646143/77016990-265c-11e6-9ecc-d82ae2c74f71.png)
+
 ### Version
+v2.1 - Now, you can compress images (jpg or png). Automatic for uploads and rightMenu option also.
 v2 - You can use with your original Laravel 5 files. Multiple fixes and addons.
 
 
@@ -23,8 +26,9 @@ Aliase to `Zipper` is automatic loaded from `FileManagerServiceProvider (It's re
 
 
 Publish config, views and public files:
-`php artisan vendor:publish --provider="Infinety\FileManager\FileManagerServiceProvider"
-`
+```php
+php artisan vendor:publish --provider="Infinety\FileManager\FileManagerServiceProvider"
+```
 
 Then you need to modify options on new file on options `filemanager.php`
 
@@ -48,7 +52,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'defaultRoute'  => 'dashboard/filemanager',
+    'defaultRoute'  => 'admin/filemanager',
 
 
     /*
@@ -70,7 +74,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Files You don't wont to show on File Manager
+    | Files You don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
     */
@@ -79,7 +83,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Folders names you don't wont to show on File Manager
+    | Folders names you don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
     */
@@ -88,7 +92,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Folders names you don't wont to show on File Manager
+    | Extensions you don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
     */
@@ -102,23 +106,67 @@ return array(
     */
     'appendUrl'  => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | If optimizeImages is set tu true, action to optimize images will be available under contextualMenu.
+    | Images will be also optimized by method upload
+    | False by default
+    |--------------------------------------------------------------------------
+    |
+    */
+    'optimizeImages' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Path for pngquant. This is used to auto optimize png files. If set to null, FileManager will not optimize png files.
+    | You must install pngquant in your host. https://pngquant.org
+    | Must have optimizeImages option set to true
+    | Null by default
+    |--------------------------------------------------------------------------
+    |
+    */
+    'pngquantPath'  => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Path for pngquant. This is used to auto optimize jpg files. If set to null, FileManager will not optimize jpg files.
+    | You must install JPEG Archive in your host. https://github.com/danielgtaylor/jpeg-archive
+    | Must have optimizeImages option set to true
+    | Null by default
+    |--------------------------------------------------------------------------
+    |
+    */
+    'jpegRecompressPath'  => null,
+
 
 );
-
-?>
 ```
 
 You can see your new FileManager. Default to: `admin/filemanager`.
 
+Also has a dialog version. For if you want to use it as Modal. Just go to `filmanager/dialog`
 
-### Todos
+
+### More Screenshots
+
+![screenshot-2](https://cloud.githubusercontent.com/assets/74367/15646186/a05dfe2a-265c-11e6-8374-0e6673b23508.png)
+
+![screenshot-3](https://cloud.githubusercontent.com/assets/74367/15646188/a0964168-265c-11e6-86fb-b17c9e781c28.png)
+
+![screenshot-4](https://cloud.githubusercontent.com/assets/74367/15646187/a07894a6-265c-11e6-84b3-ff4b7cac3203.png)
+
+![screenshot-5](https://cloud.githubusercontent.com/assets/74367/15646185/a03df24c-265c-11e6-9b0e-349bebd5d241.png)
+
+
+
+### ToDo
 
  * Better docs
 
 ### Thanks
-Daniel Morales: [dmuploader][1]
-SWIS: [contextMenu][2]
-Nils Plaschke: [Chumper/Zipper] [3]
+* Daniel Morales: [dmuploader][1]
+* SWIS: [contextMenu][2]
+* Nils Plaschke: [Chumper/Zipper] [3]
 
 ---- 
 License: MIT

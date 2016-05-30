@@ -8,12 +8,28 @@ $(document).ready(function(){
      * MAIN FUNCTIONS *
      ******************/
 
+    PNotify.prototype.options.delay = 2000;
+    var oldIcon;
     /**
      * Add Loading div
      */
     addLoading = function(){
         $("#files_container").empty().html('<div class="loading"><img src="'+image_path+'filemanager_assets/img/loading.svg"></div>');
     };
+
+    loadingIcon = function(){
+        if(triggerObject){
+            oldIcon = triggerObject.find('.icon').find('img').attr('src');
+            triggerObject.find('.icon').find('img').attr('src', image_path+'filemanager_assets/img/loading.svg');
+        }
+    }
+
+    removeLoadingIcon = function(){
+        if(triggerObject){
+            triggerObject.find('.icon').find('img').attr('src', oldIcon);
+            triggerObject = null;
+        }
+    }
 
 
     checkFileSelected = function(){
@@ -83,7 +99,7 @@ $(document).ready(function(){
                 });
             } else {
                 new PNotify({
-                    title: 'Folder Created!',
+                    title: 'File Optimized!',
                     text: data.success,
                     type: 'success'
                 });
@@ -208,6 +224,42 @@ $(document).ready(function(){
         });
     };
 
+
+    /**
+     * Function to rename files or Folders
+     * @param newName
+     */
+    omptimizeImage = function(file, type){
+        loadingIcon();
+        $.ajax({
+            url: url_optimize,
+            type: "POST",
+            data: {'type': type, 'file' : file }
+        }).done(function( data ) {
+            if(data.error){
+                new PNotify({
+                    title: 'Error',
+                    text: data.error,
+                    type: 'error'
+                });
+            } else {
+                new PNotify({
+                    title: (type == 'file') ? 'File  Renamed!' : 'Folder Renamed!',
+                    text: data.success,
+                    type: 'success'
+                });
+                $('.refresh').trigger('click');
+            }
+        }).fail(function(data) {
+            new PNotify({
+                title: 'Error',
+                text: 'Error to process request',
+                type: 'error'
+            });
+        });
+    };
+
+
     /**
      * Generates breadcrum for given folder
      *
@@ -286,6 +338,7 @@ $(document).ready(function(){
                 }
                 $('.file, .folder').removeClass('active');
                 $($trigger).addClass('active');
+                triggerObject = $trigger;
                 actionFileButtons();
                 return {
                     callback: function(key, options) {
@@ -299,7 +352,7 @@ $(document).ready(function(){
             events: {
                 hide: function($trigger){
                     if(cutted_file == null){
-                        current_file = null;
+                        // current_file = null;
                     } else {
                         $('.file').removeClass('active');
                         actionFileButtons();
@@ -328,6 +381,31 @@ $(document).ready(function(){
                 }
             };
             $elements.push(preview);
+            if(current_file.type == 'image' && optimizeOption == true){
+                ext = current_file.name.slice((current_file.name.lastIndexOf(".") - 1 >>> 0) + 2);
+                if(ext == 'png'){
+                    var optimize = {
+                        name: "Optimize PNG",
+                        icon: 'fa-compress',
+                        callback: function(key, options) {
+                            omptimizeImage(current_file.path, ext);
+                        }
+                    };
+                    $elements.push(optimize);
+                }
+                if(ext == 'jpg' || ext == 'jpeg'){
+                    var optimize = {
+                        name: "Optimize JPG",
+                        icon: 'fa-compress',
+                        callback: function(key, options) {
+                            
+                            omptimizeImage(current_file.path, ext);
+                        }
+                    };
+                    $elements.push(optimize);
+                }
+            }
+            
         }
 
         var rename = {
@@ -424,7 +502,6 @@ $(document).ready(function(){
             icon: 'fa-trash',
             disabled: checkFileOrFolder(),
             callback: function(key, options) {
-
                 if($(this).data('type')){
                     swal(
                         {  title: "Are you sure?",

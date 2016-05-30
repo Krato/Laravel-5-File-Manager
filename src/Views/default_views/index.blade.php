@@ -112,7 +112,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.js" type="text/javascript"></script>
     <script src="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.contextMenu.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/filemanager_assets/vendor/contextMenu/dist/jquery.ui.position.min.js') }}" type="text/javascript"></script>
 
@@ -155,6 +155,8 @@
             url_preview  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/preview') }}";
             url_move  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/move') }}";
             url_rename  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/rename') }}";
+            url_optimize  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/optimize') }}";
+            optimize = {{ (config('filemanager.optimizeImages', false)) == 1 ? 'true' : 'false'  }};
             image_path  = "{{ asset('/') }}";
             homeFolder  = "{{ last($home) }}";
             path_folder = "";
