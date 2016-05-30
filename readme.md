@@ -1,6 +1,8 @@
 # FileManager for Laravel 5
 
-Custom file manager for Laravel 5
+Custom file manager for Laravel 5   
+
+[![Latest Stable Version](https://poser.pugx.org/infinety-es/filemanager/v/stable?format=flat-square)](https://packagist.org/packages/infinety-es/filemanager) [![Total Downloads](https://poser.pugx.org/infinety-es/filemanager/downloads?format=flat-square)](https://packagist.org/packages/infinety-es/filemanager) [![Latest Unstable Version](https://poser.pugx.org/infinety-es/filemanager/v/unstable?format=flat-square)](https://packagist.org/packages/infinety-es/filemanager) [![License](https://poser.pugx.org/infinety-es/filemanager/license?format=flat-square)](https://packagist.org/packages/infinety-es/filemanager)
 
 ![screenshot-1](https://cloud.githubusercontent.com/assets/74367/15646143/77016990-265c-11e6-9ecc-d82ae2c74f71.png)
 
