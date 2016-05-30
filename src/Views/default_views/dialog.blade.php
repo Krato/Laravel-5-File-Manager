@@ -180,7 +180,7 @@
                 url_move  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/move') }}";
                 url_rename  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/rename') }}";
                 url_optimize  = "{{ url(config('filemanager.defaultRoute', 'admin/filemanager').'/optimize') }}";
-                optimize = {{ (config('filemanager.optimizeImages', false)) == 1 ? 'true' : 'false'  }};
+                optimizeOption = {{ (config('filemanager.optimizeImages', false)) == 1 ? 'true' : 'false'  }};
                 image_path  = "{{ asset('/') }}";
                 homeFolder  = "{{ last($home) }}";
                 path_folder = "";
