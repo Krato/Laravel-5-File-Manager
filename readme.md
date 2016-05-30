@@ -4,8 +4,8 @@ Custom file manager for Laravel 5
 
 ![screenshot-1](https://cloud.githubusercontent.com/assets/74367/15646143/77016990-265c-11e6-9ecc-d82ae2c74f71.png)
 
-### Version
-v2.1 - Now, you can compress images (jpg or png). Automatic for uploads and rightMenu option also.
+### Changelog
+v2.1 - Now, you can compress images (jpg or png). Automatic for uploads and rightMenu option also.   
 v2 - You can use with your original Laravel 5 files. Multiple fixes and addons.
 
 
@@ -144,7 +144,7 @@ return array(
 
 You can see your new FileManager. Default to: `admin/filemanager`.
 
-Also has a dialog version. For if you want to use it as Modal. Just go to `filmanager/dialog`
+Also has a dialog version. For if you want to use it as Modal. Just go to your filemanager url and add `/dialog`.
 
 
 ### More Screenshots
