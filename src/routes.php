@@ -14,6 +14,7 @@ Route::group(['prefix' => config('filemanager.defaultRoute', 'admin/filemanager'
 	Route::post('/preview', 'Infinety\FileManager\Controllers\FileManagerController@preview')->where('file', '.*');
 	Route::post('/move', 'Infinety\FileManager\Controllers\FileManagerController@move');
 	Route::post('/rename', 'Infinety\FileManager\Controllers\FileManagerController@rename')->where('file', '.*');
+	Route::post('/optimize', 'Infinety\FileManager\Controllers\FileManagerController@optimize')->where('file', '.*');
 });
 
 
