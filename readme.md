@@ -140,13 +140,16 @@ return array(
     */
     'jpegRecompressPath'  => null,
 
-
 );
 ```
 
 You can see your new FileManager. Default to: `admin/filemanager`.
 
-Also has a dialog version. For if you want to use it as Modal. Just go to your filemanager url and add `/dialog`.
+### Dialog (Modal) version
+
+FileManager has also a dialog or modal version.
+
+[How to use dialog as file selector](dialog.md)
 
 
 ### More Screenshots

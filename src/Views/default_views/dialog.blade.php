@@ -199,7 +199,7 @@
 
             });
         </script>
-        <script src="{{ asset('filemanager_assets/js/filemanager.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('filemanager_assets/js/filemanager.min.js') }}" type="text/javascript"></script>
         <script src="{{ asset('filemanager_assets/js/upload.js') }}" type="text/javascript"></script>
     </body>
 </html>

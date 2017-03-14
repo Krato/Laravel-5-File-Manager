@@ -99,7 +99,7 @@ $(document).ready(function(){
                 });
             } else {
                 new PNotify({
-                    title: 'File Optimized!',
+                    title: 'Folder Created!',
                     text: data.success,
                     type: 'success'
                 });
