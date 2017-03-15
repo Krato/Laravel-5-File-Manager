@@ -1,7 +1,6 @@
 <?php
 
-return array(
-
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +18,6 @@ return array(
     */
     'defaultRoute'  => 'admin/filemanager',
 
-
     /*
     |--------------------------------------------------------------------------
     | User middleware. You can use or single string or array based
@@ -27,7 +25,6 @@ return array(
     |
     */
     'middleware'  => ['web', 'auth'],
-
 
     /*
     |--------------------------------------------------------------------------
@@ -43,8 +40,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'exceptFiles'   => array( 'robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'),
-
+    'exceptFiles'   => ['robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'],
 
     /*
     |--------------------------------------------------------------------------
@@ -52,8 +48,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'exceptFolders' => array( 'vendor', 'thumbs', 'filemanager_assets'),
-
+    'exceptFolders' => ['vendor', 'thumbs', 'filemanager_assets'],
 
     /*
     |--------------------------------------------------------------------------
@@ -61,7 +56,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    'exceptExtensions'  => array( 'php', 'htaccess', 'gitignore'),
+    'exceptExtensions'  => ['php', 'htaccess', 'gitignore'],
 
     /*
     |--------------------------------------------------------------------------
@@ -103,5 +98,4 @@ return array(
     */
     'jpegRecompressPath'  => null,
 
-
-);
+];

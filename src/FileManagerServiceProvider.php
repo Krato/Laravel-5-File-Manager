@@ -7,8 +7,6 @@ use Infinety\FileManager\Helpers\FileManagerHelper;
 
 class FileManagerServiceProvider extends ServiceProvider
 {
-
-
     /**
      * Bootstrap the application services.
      *
@@ -16,8 +14,7 @@ class FileManagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        if (! $this->app->routesAreCached()) {
+        if (!$this->app->routesAreCached()) {
             require __DIR__.'/routes.php';
         }
 
@@ -29,38 +26,35 @@ class FileManagerServiceProvider extends ServiceProvider
         // $this->publishes([
         //     realpath(__DIR__.'/resources/lang') => $this->app->basePath().'/resources/lang'
         // ], 'lang');
-        // 
+        //
 
-        /**
+        /*
          * Publish Public Assets
          */
         $this->publishes([
             __DIR__.'/public' => public_path('filemanager_assets'),
         ], 'public');
 
-
-        /**
+        /*
          * Publish Layout view
          */
         $this->publishes([
             __DIR__.'/Views/layout' => base_path('resources/views/layouts'),
         ], 'layout');
 
-
-        /**
+        /*
          * Publish default views
          */
         $this->publishes([
             __DIR__.'/Views/default_views' => base_path('resources/views/vendor/infinety/filemanager'),
         ], 'views');
 
-        /**
+        /*
          * Publish config file
          */
         $this->publishes([
-            __DIR__.'/config/config.php' => config_path('filemanager.php')
+            __DIR__.'/config/config.php' => config_path('filemanager.php'),
         ], 'config');
-
     }
 
     /**
@@ -70,14 +64,13 @@ class FileManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         $this->app->singleton('FileManagerHelper', function () {
-            return new FileManagerHelper;
+            return new FileManagerHelper();
         });
 
         //Load Services Providers
         $this->app->register('Chumper\Zipper\ZipperServiceProvider');
-        
+
         // Register dependancy aliases
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Zipper', 'Chumper\Zipper\Zipper');
@@ -88,7 +81,5 @@ class FileManagerServiceProvider extends ServiceProvider
 //        \Route::group(['prefix' => 'admin/filemanager', 'middleware' => 'auth'], function() {
 //            \Route::controller('/', 'Infinety\FileManager\Controllers\FileManagerController');
 //        });
-
     }
-
 }
