@@ -1,4 +1,6 @@
-<?php namespace Infinety\FileManager\Facades;
+<?php
+
+namespace Infinety\FileManager\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Infinety\FileManager\Services\FileFunctionsService;
