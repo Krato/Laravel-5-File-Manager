@@ -1,8 +1,11 @@
-<?php namespace Infinety\FileManager\Facades;
+<?php
+
+namespace Infinety\FileManager\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class FileManagerFacade extends Facade{
+class FIleManagerFacade extends Facade
+{
     /**
      * Get the registered name of the component.
      *
@@ -11,6 +14,5 @@ class FileManagerFacade extends Facade{
     protected static function getFacadeAccessor()
     {
         return 'filemanager';
-
     }
 }

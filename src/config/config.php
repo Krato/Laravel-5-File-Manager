@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -40,7 +40,7 @@ return array(
     |--------------------------------------------------------------------------
     |
      */
-    'exceptFiles'        => array('robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'),
+    'exceptFiles'        => ['robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'],
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return array(
     |--------------------------------------------------------------------------
     |
      */
-    'exceptFolders'      => array('vendor', 'thumbs', 'filemanager_assets'),
+    'exceptFolders'      => ['vendor', 'thumbs', 'filemanager_assets'],
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return array(
     |--------------------------------------------------------------------------
     |
      */
-    'exceptExtensions'   => array('php', 'htaccess', 'gitignore'),
+    'exceptExtensions'   => ['php', 'htaccess', 'gitignore'],
 
     /*
     |--------------------------------------------------------------------------
@@ -98,4 +98,4 @@ return array(
      */
     'jpegRecompressPath' => null,
 
-);
+];

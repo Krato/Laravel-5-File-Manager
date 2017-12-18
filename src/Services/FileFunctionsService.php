@@ -1,17 +1,17 @@
 <?php
+
 namespace Infinety\FileManager\Services;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class Image
- * @package App\Services\ImageUploadService
+ * Class Image.
  */
 class FileFunctionsService
 {
-
     /**
-     * Home Path
+     * Home Path.
+     *
      * @var
      */
     protected $path;
@@ -25,9 +25,11 @@ class FileFunctionsService
     }
 
     /**
-     * Handles Upload File Method
+     * Handles Upload File Method.
+     *
      * @param UploadedFile|null $file
      * @param $folder
+     *
      * @return stringch
      */
     public function uploadFile(UploadedFile $file = null, $folder)
@@ -38,9 +40,11 @@ class FileFunctionsService
     }
 
     /**
-     * Creates new folder on path
+     * Creates new folder on path.
+     *
      * @param $newName
      * @param $currentFolder
+     *
      * @return array
      */
     public function createFolder($newName, $currentFolder)
@@ -64,13 +68,14 @@ class FileFunctionsService
     }
 
     /**
-     * Move or rename a file or folder
+     * Move or rename a file or folder.
      *
      * @param $oldFile
      * @param $newPath
      * @param $name
      * @param $type
      * @param string $fileOrFolder
+     *
      * @return array
      */
     public function rename($oldFile, $newPath, $name, $type, $fileOrFolder = 'file')
@@ -96,10 +101,12 @@ class FileFunctionsService
     }
 
     /**
-     * Deletes a file or Folder
+     * Deletes a file or Folder.
+     *
      * @param $data
      * @param $folder
      * @param $type
+     *
      * @return array
      */
     public function delete($data, $folder, $type)
@@ -127,10 +134,11 @@ class FileFunctionsService
     }
 
     /**
-     * Optimize an image. Only supports JPG and PNG files
+     * Optimize an image. Only supports JPG and PNG files.
      *
-     * @param  string $file
-     * @param  string $type
+     * @param string $file
+     * @param string $type
+     *
      * @return array
      */
     public function optimize($file, $type)
@@ -173,7 +181,7 @@ class FileFunctionsService
     }
 
     /**
-     * Removes a folder recursively
+     * Removes a folder recursively.
      *
      * @param $dir
      */
@@ -195,10 +203,11 @@ class FileFunctionsService
     }
 
     /**
-     * Handles Upload files
+     * Handles Upload files.
      *
      * @param UploadedFile $file
      * @param $folder
+     *
      * @return stringch
      */
     private function upload(UploadedFile $file, $folder)
@@ -250,10 +259,11 @@ class FileFunctionsService
     }
 
     /**
-     * Check if validName option is true and then sanitize new string
+     * Check if validName option is true and then sanitize new string.
      *
-     * @param  string $name
-     * @param  string $folder
+     * @param string $name
+     * @param string $folder
+     *
      * @return string
      */
     private function checkValidNameOption($name, $folder)
@@ -273,9 +283,10 @@ class FileFunctionsService
     }
 
     /**
-     * Check if folder exists
+     * Check if folder exists.
      *
      * @param $folder
+     *
      * @return bool
      */
     private function checkFolderExists($folder)
@@ -288,8 +299,10 @@ class FileFunctionsService
     }
 
     /**
-     * Check permissions of folder
+     * Check permissions of folder.
+     *
      * @param $path
+     *
      * @return string
      */
     private function checkPerms($path)
@@ -300,10 +313,11 @@ class FileFunctionsService
     }
 
     /**
-     * Check if file is on server and returns the name of file plus counter
+     * Check if file is on server and returns the name of file plus counter.
      *
      * @param $folder
      * @param $name
+     *
      * @return bool|string
      */
     private function checkFileExists($folder, $name)
@@ -326,13 +340,14 @@ class FileFunctionsService
      * @param $string
      * @param bool $force_lowercase
      * @param bool $anal
+     *
      * @return bool|mixed|string
      */
     private function sanitize($string, $force_lowercase = true, $anal = true)
     {
-        $strip = array('~', '`', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '=', '+', '[', '{', ']',
+        $strip = ['~', '`', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '=', '+', '[', '{', ']',
             '}', '\\', '|', ';', ':', '"', "'", '&#8216;', '&#8217;', '&#8220;', '&#8221;', '&#8211;', '&#8212;',
-            'â€”', 'â€“', ',', '<', '.', '>', '/', '?');
+            'â€”', 'â€“', ',', '<', '.', '>', '/', '?', ];
         $clean = trim(str_replace($strip, '-', strip_tags($string)));
         $clean = preg_replace('/\s+/', '-', $clean);
         $clean = ($anal) ? preg_replace('/[^a-zA-Z0-9]/', '-', $clean) : $clean;
@@ -356,6 +371,7 @@ class FileFunctionsService
      *
      * @param $path_to_png_file string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
      * @param $max_quality int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
+     *
      * @return string - content of PNG file after conversion
      */
     public function compressPng($path_to_png_file, $max_quality = 99)
@@ -380,11 +396,12 @@ class FileFunctionsService
     }
 
     /**
-     * Optimizes JPG file with jpg-recompress
+     * Optimizes JPG file with jpg-recompress.
      *
-     * @param  [type]  $path_to_jpg_file [description]
-     * @param  integer $max_quality      [description]
-     * @return [type]                    [description]
+     * @param [type] $path_to_jpg_file [description]
+     * @param int    $max_quality      [description]
+     *
+     * @return [type] [description]
      */
     public function compressJpg($path_to_jpg_file, $max_quality = 99)
     {
