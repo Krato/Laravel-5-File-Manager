@@ -1,70 +1,70 @@
 <?php
 
-return [
+return array(
 
     /*
     |--------------------------------------------------------------------------
     | Path home for your file manager
     |--------------------------------------------------------------------------
     |
-    */
-    'homePath'  => public_path(),
+     */
+    'homePath'           => public_path(),
 
     /*
     |--------------------------------------------------------------------------
     | Default routes for your file manager. You can modify here:
     |--------------------------------------------------------------------------
     |
-    */
-    'defaultRoute'  => 'admin/filemanager',
+     */
+    'defaultRoute'       => 'admin/filemanager',
 
     /*
     |--------------------------------------------------------------------------
     | User middleware. You can use or single string or array based
     |--------------------------------------------------------------------------
     |
-    */
-    'middleware'  => ['web', 'auth'],
+     */
+    'middleware'         => ['web', 'auth'],
 
     /*
     |--------------------------------------------------------------------------
     | Use this options if you want to sanitize file and folder names
     |--------------------------------------------------------------------------
     |
-    */
-    'validName'  => true,
+     */
+    'validName'          => true,
 
     /*
     |--------------------------------------------------------------------------
     | Files You don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
-    */
-    'exceptFiles'   => ['robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'],
+     */
+    'exceptFiles'        => array('robots.txt', 'index.php', '.DS_Store', '.Thumbs.db'),
 
     /*
     |--------------------------------------------------------------------------
     | Folders names you don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
-    */
-    'exceptFolders' => ['vendor', 'thumbs', 'filemanager_assets'],
+     */
+    'exceptFolders'      => array('vendor', 'thumbs', 'filemanager_assets'),
 
     /*
     |--------------------------------------------------------------------------
     | Extensions you don't want to show on File Manager
     |--------------------------------------------------------------------------
     |
-    */
-    'exceptExtensions'  => ['php', 'htaccess', 'gitignore'],
+     */
+    'exceptExtensions'   => array('php', 'htaccess', 'gitignore'),
 
     /*
     |--------------------------------------------------------------------------
     | Append tu url. For if you use a custom service to load assets by url. Example here: http://stackoverflow.com/a/36351219/4042595
     |--------------------------------------------------------------------------
     |
-    */
-    'appendUrl'  => null,
+     */
+    'appendUrl'          => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -73,8 +73,8 @@ return [
     | False by default
     |--------------------------------------------------------------------------
     |
-    */
-    'optimizeImages' => false,
+     */
+    'optimizeImages'     => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -84,8 +84,8 @@ return [
     | Null by default
     |--------------------------------------------------------------------------
     |
-    */
-    'pngquantPath'  => null,
+     */
+    'mozcjpegPath'       => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
     | Null by default
     |--------------------------------------------------------------------------
     |
-    */
-    'jpegRecompressPath'  => null,
+     */
+    'jpegRecompressPath' => null,
 
-];
+);

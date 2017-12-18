@@ -244,7 +244,7 @@ $(document).ready(function(){
                 });
             } else {
                 new PNotify({
-                    title: (type == 'file') ? 'File  Renamed!' : 'Folder Renamed!',
+                    title: (type == 'file') ? 'File  Optimized!' : 'Folder Optimized!',
                     text: data.success,
                     type: 'success'
                 });
