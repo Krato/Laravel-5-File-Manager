@@ -21,5 +21,12 @@
         "psr-4": {
             "Infinety\\FileManager\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Infinety\\FileManager\\FileManagerServiceProvider"
+            ]
+        }
     }
 }
