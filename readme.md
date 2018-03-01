@@ -12,7 +12,7 @@ Custom file manager for Laravel 5
 ![screenshot-1](https://cloud.githubusercontent.com/assets/74367/15646143/77016990-265c-11e6-9ecc-d82ae2c74f71.png)
 
 ### Changelog
-v2.3 - Autoload provider for Laravel 5.5
+v2.3 - Autoload provider for Laravel 5.5     
 v2.1 - Now, you can compress images (jpg or png). Automatic for uploads and rightMenu option also.   
 v2 - You can use with your original Laravel 5 files. Multiple fixes and addons.
 
